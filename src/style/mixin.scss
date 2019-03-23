@@ -1,0 +1,17 @@
+// 弹性盒子flex
+@mixin flex-box ($direct: row, $justifyContent: flex-start, $alignItems: flex-start, $wrap: nowarp) {
+    display: flex;
+    flex-direction: $direct;
+    justify-content: $justifyContent;
+    align-items: $alignItems;
+    flex-wrap: $wrap;
+}
+
+// 向上向下平移元素
+@mixin translate ($x: 0, $y: 0, $s: 1) {
+    transform: translate($x, $y) scale($s);
+    -ms-transform: translate($x, $y) scale($s); /* IE 9 */
+    -moz-transform: translate($x, $y) scale($s); /* Firefox */
+    -webkit-transform: translate($x, $y) scale($s); /* Safari 和 Chrome */
+    -o-transform: translate($x, $y) scale($s); /* Opera */
+}
