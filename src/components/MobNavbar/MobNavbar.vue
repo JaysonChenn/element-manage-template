@@ -6,9 +6,10 @@
     <section>
       <ul>
         <li v-for="(item, index) in navBarArr" :key="index">
-          <div class="select-title" @click="item.children.length > 1 ? handleExpand('expand', item, index) : handleExpand('location', item, index)">
-            <span :class="[$route.path == item.path ? 'active-navbar' : '']">{{item.name}}</span>
-            <i :class="item.isSelected? 'el-icon-arrow-up' : 'el-icon-arrow-down'" v-if="item.children.length > 1"></i>
+          <div :class="[$route.path == item.path ? 'active-navbar' : '']" class="select-title" @click="item.children.length > 1 ? handleExpand('expand', item, index) : handleExpand('location', item, index)">
+            <i :class="`iconfont ${item.icon}`"></i>
+            <span class="navar-title">{{item.name}}</span>
+            <i :class="item.isSelected? 'el-icon-arrow-up arrow' : 'el-icon-arrow-down arrow'" v-if="item.children.length > 1"></i>
           </div>
           <div class="select-content" :style="item.isSelected? 'display: block' : 'display: none'">
             <p v-show="item.children.length > 1" v-for="(itemChild, indexChild) in item.children" :key="indexChild"
@@ -137,12 +138,21 @@ export default {
 
         p {
           margin: 0;
-          padding: 12px 20px 0 20px;
+          padding: 12px 20px 0 35px;
         }
 
         .select-title {
-          @include flex-box(row, space-between, center, nowrap);
+          @include flex-box(row, flex-start, center, nowrap);
           cursor: pointer;
+        }
+
+        .navar-title{
+          margin-left: 10px;
+        }
+
+        .arrow{
+          flex: 1;
+          text-align: right
         }
 
         .select-content {

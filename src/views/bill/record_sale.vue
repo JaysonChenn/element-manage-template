@@ -1,51 +1,49 @@
 <template>
   <div id="recordsale">
-    <el-container class="container">
-      <el-row class="toolbar">
-        <el-input v-model="playId" placeholder="玩家ID" size="small" class="input w-150" clearable></el-input>
-        <el-input v-model="diamonStart" placeholder="砖石范围起" size="small" class="input w-150" clearable></el-input><span class="arrow">-</span>
-        <el-input v-model="diamonEnd" placeholder="砖石范围止" size="small" class="input w-150" clearable></el-input>
-        <el-button type="primary" size="small" @click="getDefaultInfo(); currentPage = 1">查询</el-button>
-      </el-row>
-      <el-main class="inside-main">
-        <el-table :data="tableData" size="medium" stripe>
-          <el-table-column prop="id" label="ID">
-          </el-table-column>
-          <el-table-column prop="avatar" label="头像">
-            <template slot-scope="slot">
-              <img :src="slot.row.avatar" alt="头像" class="avatar">
-            </template>
-          </el-table-column>
-          <el-table-column prop="player_id" label="玩家ID">
-          </el-table-column>
-          <el-table-column prop="nickname" label="玩家昵称">
-          </el-table-column>
-          <el-table-column prop="diamond_num" label="购买砖石">
-          </el-table-column>
-          <el-table-column prop="account_name" label="购买日期">
-            <template slot-scope="slot">
-              {{PublicMethod.formatDate(slot.row.datetime)}}
-            </template>
-          </el-table-column>
-        </el-table>
-      </el-main>
-      <el-footer class="footer">
-        <el-pagination
-          small
-          @current-change="getDefaultInfo"
-          :current-page.sync="currentPage"
-          :page-size="pageSize"
-          layout="total, prev, pager, next"
-          :total="totalPage">
-        </el-pagination>
-      </el-footer>
-    </el-container>
+    <el-row class="toolbar">
+      <el-input v-model="playId" placeholder="玩家ID" size="small" class="input w-150" clearable></el-input>
+      <el-input v-model="diamonStart" placeholder="砖石范围起" size="small" class="input w-150" clearable></el-input><span class="arrow">-</span>
+      <el-input v-model="diamonEnd" placeholder="砖石范围止" size="small" class="input w-150" clearable></el-input>
+      <el-button type="primary" size="small" @click="getDefaultInfo(); currentPage = 1">查询</el-button>
+    </el-row>
+    <el-row class="inside-container">
+      <el-table :data="tableData" size="medium" stripe>
+        <el-table-column prop="id" label="ID">
+        </el-table-column>
+        <el-table-column prop="avatar" label="头像">
+          <template slot-scope="slot">
+            <img :src="slot.row.avatar" alt="头像" class="avatar">
+          </template>
+        </el-table-column>
+        <el-table-column prop="player_id" label="玩家ID">
+        </el-table-column>
+        <el-table-column prop="nickname" label="玩家昵称">
+        </el-table-column>
+        <el-table-column prop="diamond_num" label="购买砖石">
+        </el-table-column>
+        <el-table-column prop="datetime" label="购买日期">
+          <template slot-scope="slot">
+            {{PublicMethod.formatDate(slot.row.datetime)}}
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-row>
+    <el-row class="footer">
+      <el-pagination
+        small
+        @current-change="getDefaultInfo"
+        :current-page.sync="currentPage"
+        :page-size="pageSize"
+        layout="total, prev, pager, next"
+        :total="totalPage">
+      </el-pagination>
+    </el-row>
   </div>
 </template>
 
 <script>
 import {
-  RecordSale
+  RecordSaleApi
 } from '@/api/bill'
 import Breadcrumb from '@/components/Breadcrumb/Breadcrumb'
 
@@ -55,7 +53,6 @@ export default {
   },
   data () {
     return {
-      input: '',
       tableData: [],
       currentPage: 1,
       totalPage: 0,
@@ -72,7 +69,7 @@ export default {
      * {
      *  sum_data 是否计算总数
      *  order 默认排序
-     *  datetime__gte 时间
+     *  datetime__gte 最近3天时间
      *  diamond_num__gte 砖石范围起
      *  diamond_num__lte 砖石范围止
      *  player_id 玩家ID
@@ -91,7 +88,7 @@ export default {
         start: this.currentPage,
         player_id: this.playId
       }
-      RecordSale(this.PublicMethod.removeProperty(param))
+      RecordSaleApi(this.PublicMethod.removeProperty(param))
         .then(res => {
           if (res.data.code === 0) {
             this.tableData = res.data.data.data
@@ -107,42 +104,44 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-#recordsale {
-  display: flex;
-  flex-direction: column;
+// mixin scss
+@import '@/style/mixin.scss';
+
+#recordsale{
+  @include flex-box(column, flex-start, none);
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, .1);
+  background: #fff;
+  width: 100%;
   height: 100%;
 
-  .container{
-    display: flex;
-    flex-direction: column;
-    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, .1);
-    background: #fff;
+  .toolbar{
+    padding: 16px;
+    border-bottom: 1px solid #eef3f7;
 
-    .toolbar {
-      padding: 16px;
-      border-bottom: 1px solid #eef3f7;
-
-      .el-button+.el-button {
-        margin: 0;
-      }
-
-      .arrow {
-        color: #C0C4CC;
-      }
+    .el-button+.el-button {
+      margin: 0;
     }
 
-    .inside-main{
-      padding: 10px;
-      .avatar{
-        width: 30px;
-      }
+    .arrow {
+      color: #C0C4CC;
     }
+  }
 
-    .footer{
-      text-align: center;
-      height: auto!important;
-      padding: 16px 0
+  .inside-container{
+    padding: 10px;
+    flex: 1;
+    overflow: auto;
+
+    .avatar{
+      width: 30px;
+      display: block;
     }
+  }
+
+  .footer{
+    text-align: center;
+    height: auto!important;
+    padding: 16px 0
   }
 }
 </style>

@@ -1,69 +1,67 @@
 <template>
-  <div id="recordwithdraw">
-    <el-container class="container">
-      <el-row class="toolbar">
-        <el-select v-model="payTypeId" placeholder="选择支付方式" size="small" class="w-150" clearable>
-          <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-          </el-option>
-        </el-select>
-        <el-input v-model="withdrawStart" placeholder="提现范围起" size="small" class="input w-150" clearable></el-input><span class="arrow">-</span>
-        <el-input v-model="withdrawEnd" placeholder="提现范围止" size="small" class="input w-150" clearable></el-input>
-        <el-button type="primary" size="small" @click="getDefaultInfo(); currentPage = 1">查询</el-button>
-      </el-row>
-      <el-main class="inside-main">
-        <el-table :data="tableData" size="medium" stripe>
-          <el-table-column prop="id" label="ID">
-          </el-table-column>
-          <el-table-column prop="cash_num" label="提现金额">
-            <template slot-scope="slot">
-              <i class="iconfont iconqiandai"></i>
-              {{slot.row.cash_num}}
-            </template>
-          </el-table-column>
-          <el-table-column prop="diamond_num" label="对应钻石数">
-          </el-table-column>
-          <el-table-column prop="pay_type" label="支付方式">
-            <template slot-scope="slot">
-              {{slot.row.pay_type == 1 ? '微信' : slot.row.pay_type == 2 ? '支付宝' : '银行卡'}}
-            </template>
-          </el-table-column>
-          <el-table-column prop="bank_name" label="银行全称/支付宝/微信">
-          </el-table-column>
-          <el-table-column prop="account_name" label="户主姓名">
-          </el-table-column>
-          <el-table-column prop="bank_account" label="银行卡号">
-          </el-table-column>
-          <el-table-column prop="apply_time" label="申请时间">
-            <template slot-scope="slot">
-              {{PublicMethod.formatDate(slot.row.apply_time)}}
-            </template>
-          </el-table-column>
-          <el-table-column prop="order_status" label="订单状态">
-            <template slot-scope="slot">
-              <el-tag type="danger" size="small" v-if="slot.row.order_status === 0">已拒绝</el-tag>
-              <el-tag type="success" size="small" v-else-if="slot.row.order_status === 1">已支付</el-tag>
-              <el-tag size="small" v-else>未处理</el-tag>
-            </template>
-          </el-table-column>
-        </el-table>
-      </el-main>
-      <el-footer class="footer">
-        <el-pagination
-          small
-          @current-change="getDefaultInfo"
-          :current-page.sync="currentPage"
-          :page-size="pageSize"
-          layout="total, prev, pager, next"
-          :total="totalPage">
-        </el-pagination>
-      </el-footer>
-    </el-container>
+  <div id="recordwithdraw" class="container">
+    <el-row class="toolbar">
+      <el-select v-model="payTypeId" placeholder="选择支付方式" size="small" class="w-150" clearable>
+        <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+        </el-option>
+      </el-select>
+      <el-input v-model="withdrawStart" placeholder="提现范围起" size="small" class="input w-150" clearable></el-input><span class="arrow">-</span>
+      <el-input v-model="withdrawEnd" placeholder="提现范围止" size="small" class="input w-150" clearable></el-input>
+      <el-button type="primary" size="small" @click="getDefaultInfo(); currentPage = 1">查询</el-button>
+    </el-row>
+    <el-row class="inside-container">
+      <el-table :data="tableData" size="medium" stripe>
+        <el-table-column prop="id" label="ID">
+        </el-table-column>
+        <el-table-column prop="cash_num" label="提现金额">
+          <template slot-scope="slot">
+            <i class="iconfont iconqiandai"></i>
+            {{slot.row.cash_num}}
+          </template>
+        </el-table-column>
+        <el-table-column prop="diamond_num" label="对应钻石数">
+        </el-table-column>
+        <el-table-column prop="pay_type" label="支付方式">
+          <template slot-scope="slot">
+            {{slot.row.pay_type == 1 ? '微信' : slot.row.pay_type == 2 ? '支付宝' : '银行卡'}}
+          </template>
+        </el-table-column>
+        <el-table-column prop="bank_name" label="支付渠道">
+        </el-table-column>
+        <el-table-column prop="account_name" label="户主姓名">
+        </el-table-column>
+        <el-table-column prop="bank_account" label="银行卡号">
+        </el-table-column>
+        <el-table-column prop="apply_time" label="申请时间">
+          <template slot-scope="slot">
+            {{PublicMethod.formatDate(slot.row.apply_time)}}
+          </template>
+        </el-table-column>
+        <el-table-column prop="order_status" label="订单状态">
+          <template slot-scope="slot">
+            <el-tag type="danger" size="small" v-if="slot.row.order_status === 0">已拒绝</el-tag>
+            <el-tag type="success" size="small" v-else-if="slot.row.order_status === 1">已支付</el-tag>
+            <el-tag size="small" v-else>未处理</el-tag>
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-row>
+    <el-row class="footer">
+      <el-pagination
+        small
+        @current-change="getDefaultInfo"
+        :current-page.sync="currentPage"
+        :page-size="pageSize"
+        layout="total, prev, pager, next"
+        :total="totalPage">
+      </el-pagination>
+    </el-row>
   </div>
 </template>
 
 <script>
 import {
-  RecordWithdraw
+  RecordWithdrawApi
 } from '@/api/bill'
 import Breadcrumb from '@/components/Breadcrumb/Breadcrumb'
 
@@ -73,7 +71,6 @@ export default {
   },
   data () {
     return {
-      input: '',
       tableData: [],
       payTypeId: '',
       currentPage: 1,
@@ -103,7 +100,7 @@ export default {
      * {
      *  sum_data 是否计算总数
      *  order 默认排序
-     *  apply_time__gte 申请提现时间
+     *  apply_time__gte 最近3天时间数据
      *  cash_num__gte 提现范围起
      *  cash_num__lte 提现范围止
      *  pay_type 支付类型
@@ -122,7 +119,7 @@ export default {
         start: this.currentPage,
         pay_type: this.payTypeId
       }
-      RecordWithdraw(this.PublicMethod.removeProperty(param))
+      RecordWithdrawApi(this.PublicMethod.removeProperty(param))
         .then(res => {
           if (res.data.code === 0) {
             this.tableData = res.data.data.data
@@ -138,37 +135,35 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-#recordwithdraw {
-  display: flex;
-  flex-direction: column;
+// mixin scss
+@import '@/style/mixin.scss';
+
+#recordwithdraw{
+  @include flex-box(column, flex-start, none);
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, .1);
+  background: #fff;
+  width: 100%;
   height: 100%;
 
-  .container{
-    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, .1);
-    background: #fff;
+  .toolbar {
+    padding: 16px;
+    border-bottom: 1px solid #eef3f7;
 
-    .toolbar {
-      padding: 16px;
-      border-bottom: 1px solid #eef3f7;
-
-      .el-button+.el-button {
-        margin: 0;
-      }
-
-      .arrow {
-        color: #C0C4CC;
-      }
+    .el-button+.el-button {
+      margin: 0;
     }
+  }
 
-    .inside-main{
-      padding: 10px;
-    }
+  .inside-container{
+    padding: 10px;
+    flex: 1;
+    overflow: auto;
+  }
 
-    .footer{
-      text-align: center;
-      height: auto!important;
-      padding: 16px 0
-    }
+  .footer{
+    text-align: center;
+    height: auto!important;
+    padding: 16px 0
   }
 }
 </style>

@@ -1,25 +1,32 @@
-import axios from 'axios' // 引入axios库
-import config from './config.js' // 基本配置
+import axios from 'axios'
+import config from './config.js'
 import {
   Message,
   Loading
-} from 'element-ui' // Message消息提醒
+} from 'element-ui'
 import {
   UserInfoApi
-} from '@/api/userinfo' // 获取用户信息
+} from '@/api/userinfo'
 
+/**
+ * @param{
+ * loading loading
+ * userInfo 用户信息
+ * isLoginCond 是否登陆判断条件
+ * regetUserApiCond 再次获取用户信息Api条件
+ * isNeedRegetInfo 防止获取信息接口死循环
+ * shiledApiArr 不需要再获取用户信息接口数组
+ * }
+ */
 let service = axios.create({
   baseURL: config.baseURL, // 请求地址
   timeout: config.timeout, // 请求超时时间
   headers: config.headers, // 请求头
   withCredentials: config.withCredentials // 表示跨域请求时是否需要使用凭证
 })
-let loading // loading
-let userInfo // 用户信息
-let isLoginCond // 是否登陆判断条件
-let regetUserApiCond // 再次获取用户信息Api条件
-let isNeedRegetInfo = true // 防止获取信息接口死循环
-let shiledApiArr = ['auth/agent/users/', '/auth/logout'] // 不需要再获取用户信息接口数组
+let loading, userInfo, isLoginCond, regetUserApiCond
+let isNeedRegetInfo = true
+let shiledApiArr = ['auth/agent/users/', '/auth/logout']
 
 /**
  * @description 请求拦截
@@ -58,6 +65,9 @@ service.interceptors.response.use(response => {
   }
   return response
 }, error => {
+  if (isLoginCond) {
+    loading.close()
+  }
   if (error && error.response) {
     switch (error.response.status) {
       case 400:

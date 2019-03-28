@@ -33,7 +33,7 @@ export default {
 @import '@/style/mixin.scss';
 
 #breadcrumb {
-  @include flex-box(row, space-between, center, nowrap);
+  position: relative;
   padding: 6px 20px;
   background-color: #f8f8f8;
 
@@ -52,7 +52,12 @@ export default {
   }
 
   .el-breadcrumb {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    @include translate(0, -50%);
     font-size: 13px;
+    float: right;
   }
 
   .el-breadcrumb__item {

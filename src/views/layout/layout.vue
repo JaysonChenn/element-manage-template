@@ -36,6 +36,23 @@
           <span class="num">{{diamon}}</span>
           <i class="iconfont iconfanli"></i>
           <span class="num">{{rebate}}</span>
+          <el-dropdown trigger="click">
+          <span class="el-dropdown-link">
+            <el-badge :value="2" class="item">
+              <i class="el-icon-bell"></i>
+            </el-badge>
+          </span>
+          <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item class="clearfix">
+              未读
+              <el-badge class="mark" :value="2" />
+            </el-dropdown-item>
+            <el-dropdown-item class="clearfix">
+              已读
+              <el-badge class="mark" :value="6" type="info"/>
+            </el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
           <i class="iconfont icontuichudenglu" @click="signOut()"></i>
         </div>
       </el-header>
@@ -118,6 +135,11 @@ export default {
       margin: 0 5px;
       font-weight: bold;
     }
+
+    .el-icon-bell{
+      font-size: 18px;
+      margin: 0 2px 0 5px;
+    }
   }
 
   .iconfont {
@@ -155,9 +177,9 @@ export default {
 }
 
 .el-header {
+  @include flex-box(row, space-between, center, nowrap);
   background-color: #fff;
   color: #333;
-  line-height: 55px;
   height: 55px !important;
 }
 
@@ -168,7 +190,7 @@ export default {
 
 .el-submenu .el-menu-item {
   text-align: center;
-  background-color: #5d5a5ab8 !important;
+  background-color: #010b15c2 !important;
 }
 
 .el-menu-vertical-demo:not(.el-menu--collapse) {

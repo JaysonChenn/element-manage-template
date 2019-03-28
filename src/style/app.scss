@@ -15,3 +15,17 @@ a, abbr, acronym, address, applet, article, aside, audio, b, big, blockquote, ca
 #app{
     height: 100vh;
 }
+
+// element default css
+.el-table .cell{
+    color: #515a6e;
+    font-size: 13px;
+}
+
+.el-menu--popup{
+min-width: auto !important;
+}
+
+.el-step.is-simple .el-step__title{
+font-size: 14px;
+}

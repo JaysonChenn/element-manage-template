@@ -15,3 +15,12 @@
     -webkit-transform: translate($x, $y) scale($s); /* Safari 和 Chrome */
     -o-transform: translate($x, $y) scale($s); /* Opera */
 }
+
+// translate平移
+@mixin translate ($x, $y, $s:1) {
+    transform: translate($x, $y) scale($s);
+    -ms-transform: translate($x, $y) scale($s); /* IE 9 */
+    -moz-transform: translate($x, $y) scale($s); /* Firefox */
+    -webkit-transform: translate($x, $y) scale($s); /* Safari 和 Chrome */
+    -o-transform: translate($x, $y) scale($s); /* Opera */
+}

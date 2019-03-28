@@ -1,31 +1,55 @@
 <template>
   <div id="userinfo">
-    <div class="container">
-      <el-row class="toolbar">
-        <el-input v-model="input" placeholder="请输入内容" size="small" class="input"></el-input>
-        <el-button type="primary" size="small">查询</el-button>
-        <el-button type="primary" size="small">新增</el-button>
-      </el-row>
-      <el-row class="content-box">
-        <el-table :data="tableData" stripe>
-          <el-table-column type="selection" width="55">
-          </el-table-column>
-          <el-table-column prop="date" label="日期">
-          </el-table-column>
-          <el-table-column prop="name" label="姓名">
-          </el-table-column>
-          <el-table-column prop="address" label="地址">
-          </el-table-column>
-        </el-table>
-      </el-row>
-    </div>
+    <el-row style="width: 100%">
+      <el-col :md="24" :lg="12">
+        <div class="basic-info">
+          <div class="bg"></div>
+          <div class="info">
+            <p>用户名：{{userInfo.agent_name}}</p>
+            <p>游戏Id：{{userInfo.player_id}}</p>
+            <p>手机号：{{userInfo.agent_phone}}</p>
+            <p>登录时间：{{PublicMethod.formatDate(userInfo.login_time)}}</p>
+            <P>注册时间：{{PublicMethod.formatDate(userInfo.regist_time)}}</P>
+          </div>
+        </div>
+      </el-col>
+      <el-col :md="24" :lg="12">
+        <div class="other-info">
+          <div class="info">
+            <p>代理类型：{{userInfo.agent_type}}</p>
+            <P>上级代理名：{{userInfo.parent_agent_name}}</P>
+            <p>上级代理手机号：{{userInfo.parent_agent_phone}}</p>
+            <P>下级代理数：{{userInfo.child_agents.length}}<i class="el-icon-search" @click="checkAgent()"></i></P>
+            <p>剩余钻石数：{{userInfo.diamond_amount}}</p>
+          </div>
+          <div class="info">
+            <p>总返利钻石数：{{userInfo.rebate_all}}</p>
+            <P>可领取砖石数：{{userInfo.rebate_amount}}</P>
+            <p></p>
+            <p></p>
+            <p></p>
+          </div>
+        </div>
+      </el-col>
+      <el-col>
+        <div id="myChart" class="echart"></div>
+      </el-col>
+  </el-row>
+
+  <el-dialog title="下级代理" :visible.sync="juniorAgentVisibal">
+    <el-table :data="juniorData">
+      <el-table-column property="agent_phone" label="手机号"></el-table-column>
+      <el-table-column property="agent_name" label="代理名称"></el-table-column>
+    </el-table>
+  </el-dialog>
   </div>
 </template>
 
 <script>
 import Breadcrumb from '@/components/Breadcrumb/Breadcrumb'
 import {
-  UserInfoApi
+  UserInfoApi,
+  JuniorAgentApi
 } from '@/api/userinfo'
 
 export default {
@@ -34,24 +58,10 @@ export default {
   },
   data () {
     return {
-      input: '',
-      tableData: [{
-        date: '2016-05-02',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        date: '2016-05-04',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1517 弄'
-      }, {
-        date: '2016-05-01',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1519 弄'
-      }, {
-        date: '2016-05-03',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1516 弄'
-      }]
+      userInfo: JSON.parse(sessionStorage.getItem('userinfo')),
+      myChart: '',
+      juniorAgentVisibal: false,
+      juniorData: []
     }
   },
   methods: {
@@ -66,41 +76,167 @@ export default {
             sessionStorage.setItem('userinfo', JSON.stringify(res.data.data))
           })
       }
+    },
+    /**
+     * @description 查看下级代理
+     * @param
+     * {
+     *  parent_agent_id id
+     *  size 分页大小
+     *  start 当前页
+     *  order 排序方式
+     * }
+     */
+    checkAgent () {
+      this.juniorAgentVisibal = true
+      let param = {
+        parent_agent_id: this.userInfo.id,
+        size: 15,
+        start: 1,
+        order: 'desc'
+      }
+      JuniorAgentApi(param)
+        .then(res => {
+          if (res.data.code === 0) {
+            this.juniorData = res.data.data.data
+          }
+        })
+    },
+    /**
+     * @description 初始Echart
+     */
+    initEchart () {
+      this.myChart = this.$echarts.init(document.getElementById('myChart'))
+      this.myChart.setOption({
+        tooltip: {
+          trigger: 'axis'
+        },
+        legend: {
+          data: ['剩余钻石数', '总返利砖石数', '可领取钻石数']
+        },
+        grid: {
+          left: '3%',
+          right: '4%',
+          bottom: '3%',
+          containLabel: true
+        },
+        xAxis: {
+          type: 'category',
+          boundaryGap: false
+        },
+        yAxis: {
+          type: 'value'
+        },
+        series: [
+          {
+            name: '剩余钻石数',
+            type: 'line',
+            stack: '总量',
+            data: [0, this.userInfo.diamond_amount]
+          },
+          {
+            name: '总返利砖石数',
+            type: 'line',
+            stack: '总量',
+            data: [0, this.userInfo.rebate_all]
+          },
+          {
+            name: '可领取钻石数',
+            type: 'line',
+            stack: '总量',
+            data: [0, this.userInfo.rebate_amount]
+          }
+        ]
+      })
     }
   },
   mounted () {
     this.getUerInfo()
+    this.initEchart()
+    window.onresize = this.myChart.resize
   }
 }
 </script>
 
 <style lang="scss" scoped>
 #userinfo {
-  display: flex;
-  flex-direction: column;
+  width: 100%;
   height: 100%;
+  overflow: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
 
-  .container {
-    flex: 1;
+  .basic-info{
+    display: flex;
+    height: 300px;
     background: #fff;
-    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, .1);
+    margin: 10px 0;
 
-    .toolbar {
-      padding: 16px;
-      border-bottom: 1px solid #eef3f7;
-
-      .el-button+.el-button {
-        margin: 0;
-      }
-
-      .input {
-        width: auto;
-      }
+    .bg{
+      position: relative;
+      width: 50%;
+      height: 100%;
+      background: url(../../assets/img/userinfo_bg1.jpg) no-repeat;
+      background-size: 100% 100%;
     }
 
-    .content-box {
-      padding: 10px;
+    .info{
+      display: flex;
+      flex-direction: column;
+      padding: 40px 0 40px 40px;
+      font-size: 14px;
+      flex: 1;
+      font-weight: bold;
+      color: gray;
+      font-weight: 400;
+      letter-spacing: normal!important;
+      font-family: Roboto,sans-serif!important;
+      p{
+        display: flex;
+        align-items: center;
+        flex: 1;
+      }
     }
+  }
+
+  .other-info{
+    display: flex;
+    height: 300px;
+    background: #fff;
+    margin: 10px 0;
+    .info{
+      display: flex;
+      flex-direction: column;
+      font-size: 14px;
+      flex: 1;
+      padding: 40px;
+      font-weight: bold;
+      color: gray;
+      font-weight: 400;
+      letter-spacing: normal!important;
+      font-family: Roboto,sans-serif!important;
+      p{
+        flex: 1;
+      }
+      .el-icon-search{
+        cursor: pointer;
+        margin-left: 10px
+      }
+    }
+    .info:nth-of-type(1){
+      border-left: 1px dotted rgba($color: gray, $alpha: .2);
+      border-right: 1px dotted rgba($color: gray, $alpha: .2);
+    }
+  }
+
+  .echart{
+    width: 100%;
+    height: 400px;
+    background: #fff;
+    margin-top: 10px;
+    padding: 15px 0
   }
 }
 </style>
