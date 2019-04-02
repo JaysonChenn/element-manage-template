@@ -1,6 +1,6 @@
 <template>
   <div id="userinfo">
-    <el-row style="width: 100%">
+    <el-row :gutter="10" style="width: 100%">
       <el-col :md="24" :lg="12">
         <div class="basic-info">
           <div class="bg"></div>
@@ -8,8 +8,8 @@
             <p>用户名：{{userInfo.agent_name}}</p>
             <p>游戏Id：{{userInfo.player_id}}</p>
             <p>手机号：{{userInfo.agent_phone}}</p>
-            <p>登录时间：{{PublicMethod.formatDate(userInfo.login_time)}}</p>
-            <P>注册时间：{{PublicMethod.formatDate(userInfo.regist_time)}}</P>
+            <p v-if="userInfo.login_time">登录时间：{{PublicMethod.formatDate(userInfo.login_time)}}</p>
+            <P v-if="userInfo.regist_time">注册时间：{{PublicMethod.formatDate(userInfo.regist_time)}}</P>
           </div>
         </div>
       </el-col>
@@ -19,7 +19,7 @@
             <p>代理类型：{{userInfo.agent_type}}</p>
             <P>上级代理名：{{userInfo.parent_agent_name}}</P>
             <p>上级代理手机号：{{userInfo.parent_agent_phone}}</p>
-            <P>下级代理数：{{userInfo.child_agents.length}}<i class="el-icon-search" @click="checkAgent()"></i></P>
+            <P v-if="userInfo.child_agents">下级代理数：{{userInfo.child_agents.length}}<i class="el-icon-search" @click="checkAgent()"></i></P>
             <p>剩余钻石数：{{userInfo.diamond_amount}}</p>
           </div>
           <div class="info">
@@ -51,30 +51,52 @@ import {
   UserInfoApi,
   JuniorAgentApi
 } from '@/api/userinfo'
+import {
+  NotifyMesApi
+} from '@/api/notify'
+import {
+  mapState,
+  mapMutations
+} from 'vuex'
 
 export default {
   components: {
     Breadcrumb
   },
+  inject: ['reload'],
   data () {
     return {
-      userInfo: JSON.parse(sessionStorage.getItem('userinfo')),
       myChart: '',
       juniorAgentVisibal: false,
       juniorData: []
     }
   },
+  computed: {
+    ...mapState(['userInfo'])
+  },
   methods: {
+    ...mapMutations(['setUserInfo', 'setMesInfo']),
     /**
-     * @description 获取用户信息
+     * @description 获取默认信息
      */
-    getUerInfo () {
-      let userObJ = JSON.parse(sessionStorage.getItem('userinfo'))
-      if (userObJ && userObJ !== null) {
-        UserInfoApi(userObJ.user_id)
+    async getDefaultInfo () {
+      if (JSON.parse(sessionStorage.userinfo) && JSON.parse(sessionStorage.userinfo) !== null) {
+        await UserInfoApi(JSON.parse(sessionStorage.userinfo).user_id)
           .then(res => {
             sessionStorage.setItem('userinfo', JSON.stringify(res.data.data))
+            this.setUserInfo(res.data.data)
           })
+        await NotifyMesApi()
+          .then(res => {
+            if (res.data.code === 0) {
+              let obj = {}
+              obj.allArr = res.data.data.data
+              obj.unreadArr = res.data.data.data.filter(item => { return item.notice_state === 0 })
+              obj.havereadArr = res.data.data.data.filter(item => { return item.notice_state !== 0 })
+              this.setMesInfo(obj)
+            }
+          })
+        await this.initEchart()
       }
     },
     /**
@@ -109,50 +131,62 @@ export default {
       this.myChart = this.$echarts.init(document.getElementById('myChart'))
       this.myChart.setOption({
         tooltip: {
-          trigger: 'axis'
+          trigger: 'item',
+          formatter: '{a} <br/>{b} : {c} ({d}%)'
         },
         legend: {
-          data: ['剩余钻石数', '总返利砖石数', '可领取钻石数']
+          x: 'center',
+          y: 'bottom',
+          data: ['钻石剩余数', '总返利钻石数', '可领取钻石数']
         },
-        grid: {
-          left: '3%',
-          right: '4%',
-          bottom: '3%',
-          containLabel: true
-        },
-        xAxis: {
-          type: 'category',
-          boundaryGap: false
-        },
-        yAxis: {
-          type: 'value'
-        },
+        calculable: true,
         series: [
           {
-            name: '剩余钻石数',
-            type: 'line',
-            stack: '总量',
-            data: [0, this.userInfo.diamond_amount]
+            name: '半径模式',
+            type: 'pie',
+            radius: [20, 110],
+            center: ['25%', '50%'],
+            roseType: 'radius',
+            label: {
+              normal: {
+                show: false
+              },
+              emphasis: {
+                show: true
+              }
+            },
+            lableLine: {
+              normal: {
+                show: false
+              },
+              emphasis: {
+                show: true
+              }
+            },
+            data: [
+              {value: this.userInfo.diamond_amount, name: '钻石剩余数'},
+              {value: this.userInfo.rebate_all, name: '总返利钻石数'},
+              {value: this.userInfo.rebate_amount, name: '可领取钻石数'}
+            ]
           },
           {
-            name: '总返利砖石数',
-            type: 'line',
-            stack: '总量',
-            data: [0, this.userInfo.rebate_all]
-          },
-          {
-            name: '可领取钻石数',
-            type: 'line',
-            stack: '总量',
-            data: [0, this.userInfo.rebate_amount]
+            name: '面积模式',
+            type: 'pie',
+            radius: [30, 110],
+            center: ['75%', '50%'],
+            roseType: 'area',
+            data: [
+              {value: this.userInfo.diamond_amount, name: '钻石剩余数'},
+              {value: this.userInfo.rebate_all, name: '总返利钻石数'},
+              {value: this.userInfo.rebate_amount, name: '可领取钻石数'}
+            ]
           }
         ]
       })
     }
   },
   mounted () {
-    this.getUerInfo()
-    this.initEchart()
+    this.getDefaultInfo()
     window.onresize = this.myChart.resize
   }
 }

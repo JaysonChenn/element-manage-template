@@ -67,7 +67,7 @@ export default {
 
     .inside-main{
       color: #606266;
-      padding: 30px 70px;
+      padding: 30px 40px;
       line-height: 28px;
       .avatar{
         width: 30px;

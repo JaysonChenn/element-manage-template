@@ -7,9 +7,19 @@ import {
 import {
   UserInfoApi
 } from '@/api/userinfo'
+import {
+  NotifyMesApi
+} from '@/api/notify'
+import store from '@/store/store'
 
 /**
  * @param{
+ * service {
+ *  baseURL 请求地址
+ *  timeout 请求超时时间
+ *  headers 请求头
+ *  withCredentials 表示跨域请求时是否需要使用凭证
+ * }
  * loading loading
  * userInfo 用户信息
  * isLoginCond 是否登陆判断条件
@@ -19,18 +29,16 @@ import {
  * }
  */
 let service = axios.create({
-  baseURL: config.baseURL, // 请求地址
-  timeout: config.timeout, // 请求超时时间
-  headers: config.headers, // 请求头
-  withCredentials: config.withCredentials // 表示跨域请求时是否需要使用凭证
+  baseURL: config.baseURL,
+  timeout: config.timeout,
+  headers: config.headers,
+  withCredentials: config.withCredentials
 })
 let loading, userInfo, isLoginCond, regetUserApiCond
 let isNeedRegetInfo = true
-let shiledApiArr = ['auth/agent/users/', '/auth/logout']
+let shiledApiArr = ['auth/agent/users/', '/auth/logout', '/message/agent_notice']
 
-/**
- * @description 请求拦截
- */
+// 请求拦截
 service.interceptors.request.use(config => {
   userInfo = sessionStorage.userinfo
   isLoginCond = userInfo && userInfo !== undefined
@@ -46,19 +54,31 @@ service.interceptors.request.use(config => {
   return Promise.reject(error)
 })
 
-/**
- * @description 响应拦截
- */
+// 响应拦截
 service.interceptors.response.use(response => {
   let url = response.config.url
   if (isLoginCond) {
-    regetUserApiCond = isNeedRegetInfo && url.indexOf(shiledApiArr[0]) === -1 && url.indexOf(shiledApiArr[1]) === -1
+    regetUserApiCond = isNeedRegetInfo && url.indexOf(shiledApiArr[0]) === -1 && url.indexOf(shiledApiArr[1]) === -1 && url.indexOf(shiledApiArr[2]) === -1
     if (regetUserApiCond) {
       isNeedRegetInfo = false
       UserInfoApi(JSON.parse(userInfo).user_id)
         .then(res => {
           sessionStorage.setItem('userinfo', JSON.stringify(res.data.data))
-          isNeedRegetInfo = true
+          store.commit('setUserInfo', res.data.data)
+        })
+        .then(() => {
+          let param = {
+            order: 'desc'
+          }
+          NotifyMesApi(param)
+            .then(res => {
+              let obj = {}
+              obj.allArr = res.data.data.data
+              obj.unreadArr = res.data.data.data.filter(item => { return item.notice_state === 0 })
+              obj.havereadArr = res.data.data.data.filter(item => { return item.notice_state !== 0 })
+              store.commit('setMesInfo', obj)
+              isNeedRegetInfo = true
+            })
         })
     }
     loading.close()
@@ -133,6 +153,20 @@ export default {
   post (url, param) {
     return new Promise((resolve, reject) => {
       service.post(url, param).then(res => {
+        resolve(res)
+      }, err => {
+        Message({
+          showClose: true,
+          message: err,
+          type: 'error'
+        })
+        reject(err)
+      })
+    })
+  },
+  put (url, param) {
+    return new Promise((resolve, reject) => {
+      service.put(url, param).then(res => {
         resolve(res)
       }, err => {
         Message({

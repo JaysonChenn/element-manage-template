@@ -43,7 +43,7 @@
          <el-table-column
           label="操作">
           <template slot-scope="slot">
-            <el-button type="primary" size="small" @click="handleCharge(slot.row)">充值</el-button>
+            <el-button type="primary" size="mini" @click="handleCharge(slot.row)">充值</el-button>
           </template>
         </el-table-column>
       </el-table>

@@ -38,18 +38,18 @@
           <span class="num">{{rebate}}</span>
           <el-dropdown trigger="click">
           <span class="el-dropdown-link">
-            <el-badge :value="2" class="item">
+            <el-badge v-if="mesInfo.unreadArr" :value="mesInfo.unreadArr.length" class="item">
               <i class="el-icon-bell"></i>
             </el-badge>
           </span>
           <el-dropdown-menu slot="dropdown">
               <el-dropdown-item class="clearfix">
-              未读
-              <el-badge class="mark" :value="2" />
+                <span @click="PublicMethod.toPage('/notify', {type: 'unread'}), reload()">未读</span>
+              <el-badge class="mark" v-if="mesInfo.unreadArr" :value="mesInfo.unreadArr.length" />
             </el-dropdown-item>
             <el-dropdown-item class="clearfix">
-              已读
-              <el-badge class="mark" :value="6" type="info"/>
+                <span @click="PublicMethod.toPage('/notify', {type: 'haveread'}), reload()">已读</span>
+              <el-badge class="mark" v-if="mesInfo.havereadArr" :value="mesInfo.havereadArr.length" type="info"/>
             </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
@@ -70,8 +70,12 @@ import Breadcrumb from '@/components/Breadcrumb/Breadcrumb'
 import {
   SignOutApi
 } from '@/api/login'
+import {
+  mapState
+} from 'vuex'
 
 export default {
+  inject: ['reload'],
   components: {
     MobNavbar,
     Breadcrumb
@@ -83,6 +87,9 @@ export default {
       diamon: JSON.parse(sessionStorage.userinfo).diamond_amount ? JSON.parse(sessionStorage.userinfo).diamond_amount : 0,
       rebate: JSON.parse(sessionStorage.userinfo).rebate_amount ? JSON.parse(sessionStorage.userinfo).rebate_amount : 0
     }
+  },
+  computed: {
+    ...mapState(['mesInfo'])
   },
   methods: {
     /**

@@ -20,8 +20,14 @@
 
 <script>
 import {
+  mapMutations
+} from 'vuex'
+import {
   LoginApi
 } from '@/api/login'
+import {
+  NotifyMesApi
+} from '@/api/notify'
 
 export default {
   data () {
@@ -60,6 +66,7 @@ export default {
     }
   },
   methods: {
+    ...mapMutations(['setMesInfo', 'setUserInfo']),
     /**
      * @description 登录
      */
@@ -72,8 +79,22 @@ export default {
               this.btnLoading = false
               if (res.data.code === 0) {
                 sessionStorage.setItem('userinfo', JSON.stringify(res.data.data))
-                this.$router.push('/userinfo')
+                this.setUserInfo(res.data.data)
               }
+            })
+            .then(() => {
+              let param = {
+                order: 'desc'
+              }
+              NotifyMesApi(param)
+                .then(res => {
+                  let obj = {}
+                  obj.allArr = res.data.data.data
+                  obj.unreadArr = res.data.data.data.filter(item => { return item.notice_state === 0 })
+                  obj.havereadArr = res.data.data.data.filter(item => { return item.notice_state !== 0 })
+                  this.setMesInfo(obj)
+                  this.$router.push('/userinfo')
+                })
             })
             .catch(() => {
               this.btnLoading = false

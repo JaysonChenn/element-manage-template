@@ -16,10 +16,11 @@
       </el-form-item>
       <el-form-item label="上传图片">
         <el-upload
+          :auto-upload="false"
+          :limit="1"
           action="https://jsonplaceholder.typicode.com/posts/"
           list-type="picture-card"
-          :on-preview="handlePictureCardPreview"
-          :on-remove="handleRemove">
+          :show-file-list="true">
           <i class="el-icon-plus"></i>
         </el-upload>
       </el-form-item>
@@ -31,6 +32,11 @@
 </template>
 
 <script>
+// import axios from 'axios'
+// import {
+//   OsspolicyApi
+// } from '@/api/suggest'
+
 export default {
   data () {
     return {
@@ -41,6 +47,42 @@ export default {
         desc: ''
       }
     }
+  },
+  methods: {
+    /**
+     * 初始化上传图片服务器地址
+     */
+    // getDefaultPicUrl () {
+    //   OsspolicyApi()
+    //     .then(res => {
+    //       if (res.data.code === 0) {
+    //         let resp = res.data.data
+    //         let accessid = resp.accessid
+    //         let host = resp.host
+    //         let expire = resp.expire
+    //         let signature = resp.signature
+    //         let policy = resp.policy
+    //         let dir = resp.dir
+    //         let ossData = new FormData()
+    //         ossData.append('OSSAccessKeyId', accessid)
+    //         ossData.append('policy', policy)
+    //         ossData.append('Signature', signature)
+    //         ossData.append('key', dir + fileName)
+    //         ossData.append('success_action_status', 201)
+    //         ossData.append('file', file[0])
+    //         axios({
+    //           method: 'post',
+    //           url: host,
+    //           data: ossData,
+    //           dataType: 'xml',
+    //           entype: 'multipart/form-data'
+    //         })
+    //       }
+    //     })
+    // }
+  },
+  mounted () {
+    // this.getDefaultPicUrl()
   }
 }
 </script>

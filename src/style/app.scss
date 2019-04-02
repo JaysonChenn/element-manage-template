@@ -23,9 +23,13 @@ a, abbr, acronym, address, applet, article, aside, audio, b, big, blockquote, ca
 }
 
 .el-menu--popup{
-min-width: auto !important;
+    min-width: auto !important;
 }
 
 .el-step.is-simple .el-step__title{
-font-size: 14px;
+    font-size: 14px;
+}
+
+.el-dialog{
+    width: 600px !important
 }
