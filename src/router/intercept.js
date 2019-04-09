@@ -7,7 +7,7 @@ import store from '@/store/store'
  */
 export default router.beforeEach((to, from, next) => {
   store.commit('setCurrentRoute', to)
-  let isLogin = window.sessionStorage.getItem('userinfo') == null ? null : window.sessionStorage.getItem('userinfo')
+  let isLogin = store.state.userInfo == null ? null : store.state.userInfo
   if (isLogin && isLogin !== null) {
     next()
   } else {

@@ -2,7 +2,7 @@
   <el-container id="layout">
     <!-- aside -->
     <el-aside class="hidden-sm-and-down">
-      <el-menu :default-active="$route.path" class="el-menu-vertical-demo" :collapse="isCollapse" :router="true"
+      <el-menu :default-active="$route.path" class="el-menu-vertical-demo" :collapse="isCollapse" :router="true" :unique-opened="true"
         background-color="#001529" text-color="#E2E2E2">
         <el-menu-item :index="item.path" v-for="(item, index) in this.$router.options.routes.slice(2)" :key="index"
           v-show="item.children.length == 1">
@@ -33,9 +33,9 @@
         </div>
         <div class="header-tool">
           <i class="iconfont iconlv_zuanshi diamon"></i>
-          <span class="num">{{diamon}}</span>
+          <span class="num">{{userInfo.diamond_amount}}</span>
           <i class="iconfont iconfanli"></i>
-          <span class="num">{{rebate}}</span>
+          <span class="num">{{userInfo.rebate_amount}}</span>
           <el-dropdown trigger="click">
           <span class="el-dropdown-link">
             <el-badge v-if="mesInfo.unreadArr" :value="mesInfo.unreadArr.length" class="item">
@@ -71,7 +71,8 @@ import {
   SignOutApi
 } from '@/api/login'
 import {
-  mapState
+  mapState,
+  mapMutations
 } from 'vuex'
 
 export default {
@@ -83,15 +84,14 @@ export default {
   data () {
     return {
       isCollapse: false,
-      isMobNavbarShow: false,
-      diamon: JSON.parse(sessionStorage.userinfo).diamond_amount ? JSON.parse(sessionStorage.userinfo).diamond_amount : 0,
-      rebate: JSON.parse(sessionStorage.userinfo).rebate_amount ? JSON.parse(sessionStorage.userinfo).rebate_amount : 0
+      isMobNavbarShow: false
     }
   },
   computed: {
-    ...mapState(['mesInfo'])
+    ...mapState(['userInfo', 'mesInfo'])
   },
   methods: {
+    ...mapMutations(['setUserInfo', 'setMesInfo']),
     /**
      * @description 退出登录
      */
@@ -105,6 +105,8 @@ export default {
           .then(res => {
             if (res.data.code === 0) {
               sessionStorage.removeItem('userinfo')
+              this.setMesInfo({})
+              this.setUserInfo({})
               this.$router.push('/login')
             }
           })
@@ -134,6 +136,7 @@ export default {
   .header-tool {
     @include flex-box(row, center, center, nowrap);
     float: right;
+    align-self: stretch;
     cursor: pointer;
 
     .num {
@@ -150,13 +153,17 @@ export default {
   }
 
   .iconfont {
-    margin-right: 10px;
+    margin-right: 6px;
   }
 
   .diamon {
     font-size: 17px;
     margin: 0;
     padding-bottom: 1px;
+  }
+
+  .iconlv_zuanshi{
+    font-size: 18px
   }
 
   .iconfanli {
@@ -177,6 +184,7 @@ export default {
 
 .el-container {
   height: 100%;
+  width: 100%
 }
 
 .el-menu {
@@ -207,5 +215,6 @@ export default {
 .el-main {
   background-color: #E9EEF3;
   color: #333;
+  padding: 20px 10px
 }
 </style>

@@ -6,8 +6,12 @@
     <el-row class="inside-container">
       <el-table
         :data="tableData"
+        :border="true"
+        stripe
+        size="small"
         style="width: 100%">
         <el-table-column
+          align="center"
           label="头像">
           <template slot-scope="slot">
             <img class="avatar" :src="slot.row.avatar" alt="">
@@ -15,32 +19,39 @@
         </el-table-column>
         <el-table-column
           prop="player_id"
+          align="center"
           label="玩家ID">
         </el-table-column>
         <el-table-column
           prop="nickname"
+          align="center"
           label="玩家昵称">
         </el-table-column>
         <el-table-column
           prop="buy_times"
+          align="center"
           label="充值次数">
         </el-table-column>
         <el-table-column
           prop="all_buy_diamond_amount"
+          align="center"
           label="总充值数量">
         </el-table-column>
         <el-table-column
           prop="last_buy_diamond_amount"
+          align="center"
           label="最近充值数">
         </el-table-column>
         <el-table-column
           prop="last_charge_time"
+          align="center"
           label="最近充值时间">
           <template slot-scope="slot">
             {{PublicMethod.formatDate(slot.row.last_charge_time)}}
           </template>
         </el-table-column>
          <el-table-column
+         align="center"
           label="操作">
           <template slot-scope="slot">
             <el-button type="primary" size="mini" @click="handleCharge(slot.row)">充值</el-button>
@@ -190,8 +201,9 @@ export default {
     overflow: auto;
 
     .avatar{
-      width: 30px;
+      width: 23px;
       display: block;
+      margin: 0 auto;
     }
   }
 

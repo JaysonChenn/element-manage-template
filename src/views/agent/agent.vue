@@ -2,14 +2,20 @@
   <div id="agent">
     <div class="container">
       <el-steps :active="step" simple>
-        <el-step title="选择充值卡" icon="el-icon-search"></el-step>
-        <el-step title="选择支付方式" icon="el-icon-upload"></el-step>
+        <el-step title="充值卡" icon="el-icon-search"></el-step>
+        <el-step title="支付方式" icon="el-icon-upload"></el-step>
         <el-step title="完成" icon="el-icon-check"></el-step>
       </el-steps>
       <div class="inside-content">
-        <div class="step-one" v-show="step === 1">
+        <div class="step-one"
+        v-show="step === 1">
           <el-row :gutter="10">
-            <el-col :sm="24" :md="12" :lg="8" v-for="(item, index) in cardArr" :key="index">
+            <el-col
+            v-for="(item, index) in cardArr"
+            :key="index"
+            :sm="24"
+            :md="12"
+            :lg="8">
               <div class="card">
                 <div class="top">
                   <div class="icon">
@@ -29,17 +35,29 @@
           </el-row>
         </div>
         <div class="step-two" v-show="step === 2">
-          <el-form :model="payForm" :rules="payRules" ref="payForm">
+          <el-form
+          :model="payForm"
+          :rules="payRules"
+          ref="payForm">
             <el-form-item>
-              <el-radio-group v-model="payForm.payType">
-                <el-radio :label="item" v-for="(item, index) in cardInfo.payment_method" :key="index">
+              <el-radio-group
+              v-model="payForm.payType">
+                <el-radio
+                :label="item"
+                v-for="(item, index) in cardInfo.payment_method"
+                :key="index">
                   <i :class="+item === 1 ? 'iconfont iconchangyonglogo28' : 'iconfont iconrectangle390'"></i>
                   {{item == 1 ? '微信' : '支付宝'}}
                 </el-radio>
               </el-radio-group>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" size="small" @click="submitCharge()">充值</el-button>
+              <el-button
+              type="primary"
+              size="small"
+              @click="submitCharge()">
+              充值
+              </el-button>
             </el-form-item>
           </el-form>
         </div>
@@ -198,7 +216,7 @@ export default {
             }
           }
           .bottom{
-            @include flex-box(row, space-between, center, nowrap);
+            @include flex-box(row, flex-end, center, nowrap);
             align-self: stretch;
             padding: 0 5px;
             height: 18px;

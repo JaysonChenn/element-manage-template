@@ -7,21 +7,43 @@
       <el-button type="primary" size="small" @click="getDefaultInfo(); currentPage = 1">查询</el-button>
     </el-row>
     <el-row class="inside-container">
-      <el-table :data="tableData" size="medium" stripe>
-        <el-table-column prop="id" label="ID">
-        </el-table-column>
-        <el-table-column prop="avatar" label="头像">
+      <el-table
+      :data="tableData"
+      :border="true"
+      size="small"
+      stripe>
+        <el-table-column
+        prop="avatar"
+        align="center"
+        label="头像">
           <template slot-scope="slot">
             <img :src="slot.row.avatar" alt="头像" class="avatar">
           </template>
         </el-table-column>
-        <el-table-column prop="player_id" label="玩家ID">
+        <el-table-column
+        prop="id"
+        align="center"
+        label="ID">
         </el-table-column>
-        <el-table-column prop="nickname" label="玩家昵称">
+        <el-table-column
+        prop="player_id"
+        align="center"
+        label="玩家ID">
         </el-table-column>
-        <el-table-column prop="diamond_num" label="购买砖石">
+        <el-table-column
+        prop="nickname"
+        align="center"
+        label="玩家昵称">
         </el-table-column>
-        <el-table-column prop="datetime" label="购买日期">
+        <el-table-column
+        prop="diamond_num"
+        align="center"
+        label="购买砖石">
+        </el-table-column>
+        <el-table-column
+        prop="datetime"
+        align="center"
+        label="购买日期">
           <template slot-scope="slot">
             {{PublicMethod.formatDate(slot.row.datetime)}}
           </template>
@@ -133,8 +155,9 @@ export default {
     overflow: auto;
 
     .avatar{
-      width: 30px;
+      width: 23px;
       display: block;
+      margin: 0 auto;
     }
   }
 

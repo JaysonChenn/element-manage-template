@@ -3,35 +3,99 @@
     <el-row :gutter="10" style="width: 100%">
       <el-col :md="24" :lg="12">
         <div class="basic-info">
-          <div class="bg"></div>
-          <div class="info">
-            <p>用户名：{{userInfo.agent_name}}</p>
-            <p>游戏Id：{{userInfo.player_id}}</p>
-            <p>手机号：{{userInfo.agent_phone}}</p>
-            <p v-if="userInfo.login_time">登录时间：{{PublicMethod.formatDate(userInfo.login_time)}}</p>
-            <P v-if="userInfo.regist_time">注册时间：{{PublicMethod.formatDate(userInfo.regist_time)}}</P>
-          </div>
+          <div class="head">用户信息</div>
+          <el-row class="body">
+            <el-col class="col" :xs="12" :sm="12" :md="12" :lg="6">
+              <div class="icon">
+                <i class="iconfont iconhome-page"></i>
+                <p class="title">用户名</p>
+                <p class="num">{{userInfo.agent_name}}</p>
+              </div>
+            </el-col>
+            <el-col class="col" :xs="12" :sm="12" :md="12" :lg="6">
+              <div class="icon">
+                <i class="iconfont iconhome-page"></i>
+                <p class="title">游戏Id</p>
+                <p class="num">{{userInfo.player_id}}</p>
+              </div>
+            </el-col>
+            <el-col class="col" :xs="12" :sm="12" :md="12" :lg="6">
+              <div class="icon">
+                <i class="iconfont iconhome-page"></i>
+                <p class="title">登录时间</p>
+                <p class="num">{{PublicMethod.formatDate(userInfo.login_time)}}</p>
+              </div>
+            </el-col>
+            <el-col class="col" :xs="12" :sm="12" :md="12" :lg="6">
+              <div class="icon">
+                <i class="iconfont iconhome-page"></i>
+                <p class="title">注册时间</p>
+                <p class="num">{{PublicMethod.formatDate(userInfo.regist_time)}}</p>
+              </div>
+            </el-col>
+            <el-col class="col" :xs="12" :sm="12" :md="12" :lg="6">
+              <div class="icon">
+                <i class="iconfont iconhome-page"></i>
+                <p class="title">手机号</p>
+                <p class="num">{{userInfo.agent_phone}}</p>
+              </div>
+            </el-col>
+            <el-col class="col" :xs="12" :sm="12" :md="12" :lg="6">
+              <div class="icon">
+                <i class="iconfont iconhome-page"></i>
+                <p class="title">代理类型</p>
+                <p class="num">{{Number(userInfo.agent_type) == 1 ? '麻将' : Number(userInfo.agent_type) == 2 ? '扑克' : '纸牌'}}</p>
+              </div>
+            </el-col>
+            <el-col class="col" :xs="12" :sm="12" :md="12" :lg="6">
+              <div class="icon">
+                <i class="iconfont iconhome-page"></i>
+                <p class="title">上级代理名</p>
+                <p class="num">{{userInfo.parent_agent_name}}</p>
+              </div>
+            </el-col>
+            <el-col class="col" :xs="12" :sm="12" :md="12" :lg="6">
+              <div class="icon">
+                <i class="iconfont iconhome-page"></i>
+                <p class="title">上级代理手机号</p>
+                <p class="num">{{userInfo.parent_agent_phone}}</p>
+              </div>
+            </el-col>
+          </el-row>
         </div>
       </el-col>
       <el-col :md="24" :lg="12">
         <div class="other-info">
-          <div class="info">
-            <p>代理类型：{{userInfo.agent_type}}</p>
-            <P>上级代理名：{{userInfo.parent_agent_name}}</P>
-            <p>上级代理手机号：{{userInfo.parent_agent_phone}}</p>
-            <P v-if="userInfo.child_agents">下级代理数：{{userInfo.child_agents.length}}<i class="el-icon-search" @click="checkAgent()"></i></P>
-            <p>剩余钻石数：{{userInfo.diamond_amount}}</p>
-          </div>
-          <div class="info">
-            <p>总返利钻石数：{{userInfo.rebate_all}}</p>
-            <P>可领取砖石数：{{userInfo.rebate_amount}}</P>
-            <p></p>
-            <p></p>
-            <p></p>
-          </div>
+          <div class="head">砖石相关</div>
+          <el-row class="body">
+            <el-col @click="checkAgent()" class="col" :md="24" :lg="12">
+              <div class="icon">
+                <p class="title">下级代理数</p>
+                <p class="num" v-if="userInfo.child_agents">{{userInfo.child_agents.length}}</p>
+              </div>
+            </el-col>
+            <el-col class="col" :md="24" :lg="12">
+              <div class="icon">
+                <p class="title">剩余钻石数</p>
+                <p class="num">{{userInfo.diamond_amount}}</p>
+              </div>
+            </el-col>
+            <el-col class="col" :md="24" :lg="12">
+              <div class="icon">
+                <p class="title">总返利钻石数</p>
+                <p class="num">{{userInfo.rebate_all}}</p>
+              </div>
+            </el-col>
+            <el-col class="col" :md="24" :lg="12">
+              <div class="icon">
+                <p class="title">可领取砖石数</p>
+                <p class="num">{{userInfo.rebate_amount}}</p>
+              </div>
+            </el-col>
+          </el-row>
         </div>
       </el-col>
-      <el-col>
+      <el-col class="hidden-sm-and-down">
         <div id="myChart" class="echart"></div>
       </el-col>
   </el-row>
@@ -51,9 +115,6 @@ import {
   UserInfoApi,
   JuniorAgentApi
 } from '@/api/userinfo'
-import {
-  NotifyMesApi
-} from '@/api/notify'
 import {
   mapState,
   mapMutations
@@ -79,25 +140,15 @@ export default {
     /**
      * @description 获取默认信息
      */
-    async getDefaultInfo () {
-      if (JSON.parse(sessionStorage.userinfo) && JSON.parse(sessionStorage.userinfo) !== null) {
-        await UserInfoApi(JSON.parse(sessionStorage.userinfo).user_id)
-          .then(res => {
-            sessionStorage.setItem('userinfo', JSON.stringify(res.data.data))
-            this.setUserInfo(res.data.data)
-          })
-        await NotifyMesApi()
-          .then(res => {
-            if (res.data.code === 0) {
-              let obj = {}
-              obj.allArr = res.data.data.data
-              obj.unreadArr = res.data.data.data.filter(item => { return item.notice_state === 0 })
-              obj.havereadArr = res.data.data.data.filter(item => { return item.notice_state !== 0 })
-              this.setMesInfo(obj)
-            }
-          })
-        await this.initEchart()
-      }
+    getDefaultInfo () {
+      UserInfoApi(JSON.parse(sessionStorage.userinfo).user_id)
+        .then(res => {
+          sessionStorage.setItem('userinfo', JSON.stringify(res.data.data))
+          this.setUserInfo(res.data.data)
+        })
+        .then(() => {
+          this.initEchart()
+        })
     },
     /**
      * @description 查看下级代理
@@ -183,11 +234,11 @@ export default {
           }
         ]
       })
+      window.onresize = this.myChart.resize
     }
   },
   mounted () {
     this.getDefaultInfo()
-    window.onresize = this.myChart.resize
   }
 }
 </script>
@@ -204,64 +255,83 @@ export default {
 
   .basic-info{
     display: flex;
-    height: 300px;
+    flex-direction: column;
     background: #fff;
-    margin: 10px 0;
 
-    .bg{
-      position: relative;
-      width: 50%;
-      height: 100%;
-      background: url(../../assets/img/userinfo_bg1.jpg) no-repeat;
-      background-size: 100% 100%;
+    .head{
+      line-height: 42px;
+      padding: 0 15px;
+      border-bottom: 1px solid #f6f6f6;
+      color: #333;
+      font-size: 13px
     }
-
-    .info{
-      display: flex;
-      flex-direction: column;
-      padding: 40px 0 40px 40px;
-      font-size: 14px;
-      flex: 1;
-      font-weight: bold;
-      color: gray;
-      font-weight: 400;
-      letter-spacing: normal!important;
-      font-family: Roboto,sans-serif!important;
-      p{
-        display: flex;
-        align-items: center;
-        flex: 1;
+    .body{
+      .col{
+        .icon{
+          text-align: center;
+          padding: 20px 0;
+          margin: 10px;
+          background: #F8F8F8;
+          p{
+            line-height: 16px;
+            text-align: center;
+          }
+          .iconfont{
+            font-size: 30px
+          }
+          .num{
+            font-size: 12px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap
+          }
+          .title{
+            font-size: 12px;
+            text-align: center;
+            color: #666;
+          }
+        }
       }
     }
   }
 
   .other-info{
     display: flex;
-    height: 300px;
+    flex-direction: column;
     background: #fff;
-    margin: 10px 0;
-    .info{
-      display: flex;
-      flex-direction: column;
-      font-size: 14px;
-      flex: 1;
-      padding: 40px;
-      font-weight: bold;
-      color: gray;
-      font-weight: 400;
-      letter-spacing: normal!important;
-      font-family: Roboto,sans-serif!important;
-      p{
-        flex: 1;
-      }
-      .el-icon-search{
-        cursor: pointer;
-        margin-left: 10px
-      }
+
+    .head{
+      line-height: 42px;
+      padding: 0 15px;
+      border-bottom: 1px solid #f6f6f6;
+      border-top: 1px solid #f6f6f6;
+      color: #333;
+      font-size: 13px
     }
-    .info:nth-of-type(1){
-      border-left: 1px dotted rgba($color: gray, $alpha: .2);
-      border-right: 1px dotted rgba($color: gray, $alpha: .2);
+
+    .body{
+      .col{
+        .icon{
+          text-align: left;
+          padding: 20px 0;
+          margin: 12.25px 15px;
+          background: #F8F8F8;
+          .title{
+            margin-left: 10px;
+            font-size: 12px;
+            font-weight: 400;
+            color: #999;
+            padding-bottom: 10px;
+          }
+          .num{
+            margin-left: 10px;
+            font-style: normal;
+            font-size: 30px;
+            font-weight: 300;
+            color: #009688;
+          }
+        }
+      }
     }
   }
 
@@ -269,7 +339,7 @@ export default {
     width: 100%;
     height: 400px;
     background: #fff;
-    margin-top: 10px;
+    margin-top: 20px;
     padding: 15px 0
   }
 }

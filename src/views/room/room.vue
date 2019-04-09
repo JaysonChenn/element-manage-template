@@ -59,18 +59,24 @@
       <el-row class="body">
         <el-table
           :data="roomTableData"
+          stripe
+          size="small"
+          :border="true"
           @selection-change="handleSelectionChange"
           style="width: 100%">
           <el-table-column
             type="selection"
+            align="center"
             width="55">
           </el-table-column>
           <el-table-column
             prop="room_id"
+            align="center"
             label="房间ID">
           </el-table-column>
           <el-table-column
             prop="created_time"
+            align="center"
             label="创建时间">
             <template slot-scope="slot">
               {{PublicMethod.formatDate(slot.row.created_time)}}
@@ -78,18 +84,21 @@
           </el-table-column>
           <el-table-column
             prop="ended_time"
+            align="center"
             label="结束时间">
             <template slot-scope="slot">
               {{PublicMethod.formatDate(slot.row.ended_time)}}
             </template>
           </el-table-column>
           <el-table-column
+            align="center"
             label="玩家">
             <template slot-scope="slot">
               {{slot.row.players.length}}/{{slot.row.player_limit}}
             </template>
           </el-table-column>
           <el-table-column
+            align="center"
             prop="end_status"
             label="开房状态">
             <template slot-scope="slot">
@@ -100,6 +109,7 @@
             </template>
           </el-table-column>
           <el-table-column
+            align="center"
             label="操作">
             <template slot-scope="slot">
               <el-button type="primary" size="mini" @click="roomPlayerInfo = slot.row.players; palyerTableVisible = true">查看</el-button>

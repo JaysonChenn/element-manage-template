@@ -10,34 +10,65 @@
       <el-button type="primary" size="small" @click="getDefaultInfo(); currentPage = 1">查询</el-button>
     </el-row>
     <el-row class="inside-container">
-      <el-table :data="tableData" size="medium" stripe>
-        <el-table-column prop="id" label="ID">
+      <el-table
+      :data="tableData"
+      :border="true"
+      size="small"
+      stripe>
+        <el-table-column
+        prop="id"
+        align="center"
+        label="ID">
         </el-table-column>
-        <el-table-column prop="cash_num" label="提现金额">
+        <el-table-column
+        prop="cash_num"
+        align="center"
+        label="提现金额">
           <template slot-scope="slot">
             <i class="iconfont iconqiandai"></i>
             {{slot.row.cash_num}}
           </template>
         </el-table-column>
-        <el-table-column prop="diamond_num" label="对应钻石数">
+        <el-table-column
+        prop="diamond_num"
+        align="center"
+        label="对应钻石数">
         </el-table-column>
-        <el-table-column prop="pay_type" label="支付方式">
+        <el-table-column
+        prop="pay_type"
+        align="center"
+        label="支付方式">
           <template slot-scope="slot">
             {{slot.row.pay_type == 1 ? '微信' : slot.row.pay_type == 2 ? '支付宝' : '银行卡'}}
           </template>
         </el-table-column>
-        <el-table-column prop="bank_name" label="支付渠道">
+        <el-table-column
+        prop="bank_name"
+        align="center"
+        label="支付渠道">
         </el-table-column>
-        <el-table-column prop="account_name" label="户主姓名">
+        <el-table-column
+        prop="account_name"
+        align="center"
+        label="户主姓名">
         </el-table-column>
-        <el-table-column prop="bank_account" label="银行卡号">
+        <el-table-column
+        prop="bank_account"
+        align="center"
+        label="银行卡号">
         </el-table-column>
-        <el-table-column prop="apply_time" label="申请时间">
+        <el-table-column
+        prop="apply_time"
+        align="center"
+        label="申请时间">
           <template slot-scope="slot">
             {{PublicMethod.formatDate(slot.row.apply_time)}}
           </template>
         </el-table-column>
-        <el-table-column prop="order_status" label="订单状态">
+        <el-table-column
+        prop="order_status"
+        align="center"
+        label="订单状态">
           <template slot-scope="slot">
             <el-tag type="danger" size="small" v-if="slot.row.order_status === 0">已拒绝</el-tag>
             <el-tag type="success" size="small" v-else-if="slot.row.order_status === 1">已支付</el-tag>

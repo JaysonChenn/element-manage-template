@@ -7,18 +7,40 @@
       <el-button type="primary" size="small" @click="getDefaultInfo(); currentPage = 1">查询</el-button>
     </el-row>
     <el-row class="inside-container">
-      <el-table :data="tableData" size="medium" stripe>
-        <el-table-column prop="id" label="ID">
+      <el-table
+      :data="tableData"
+      :border="true"
+      size="small"
+      stripe>
+        <el-table-column
+        prop="id"
+        align="center"
+        label="ID">
         </el-table-column>
-        <el-table-column prop="user_agent_user_id" label="代理ID">
+        <el-table-column
+        prop="user_agent_user_id"
+        align="center"
+        label="代理ID">
         </el-table-column>
-        <el-table-column prop="user_agent_name" label="名字">
+        <el-table-column
+        prop="user_agent_name"
+        align="center"
+        label="名字">
         </el-table-column>
-        <el-table-column prop="user_agent_phone" label="手机号">
+        <el-table-column
+        prop="user_agent_phone"
+        align="center"
+        label="手机号">
         </el-table-column>
-        <el-table-column prop="diamond_num" label="返砖数量">
+        <el-table-column
+        prop="diamond_num"
+        align="center"
+        label="返砖数量">
         </el-table-column>
-        <el-table-column prop="diamond_num" label="购买日期">
+        <el-table-column
+        prop="diamond_num"
+        align="center"
+        label="购买日期">
           <template slot-scope="slot">
             {{PublicMethod.formatDate(slot.row.datetime)}}
           </template>

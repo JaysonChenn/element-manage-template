@@ -1,6 +1,10 @@
+/* eslint-disable indent */
 export default {
   // 基础url前缀
-  baseURL: 'http://192.168.0.14:1237',
+  baseURL: process.env.NODE_ENV === 'development' ? 'http://192.168.0.14:1237'
+         : process.env.NODE_ENV === 'debug' ? ''
+         : process.env.NODE_ENV === 'production' ? ''
+         : '',
   // 请求头信息
   headers: {
     'Content-Type': 'application/json;charset=UTF-8'

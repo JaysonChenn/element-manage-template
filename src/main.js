@@ -10,6 +10,7 @@ import 'element-ui/lib/theme-chalk/display.css'
 import 'element-ui/lib/theme-chalk/index.css'
 import publicMethodObj from '@/assets/js/public'
 import echarts from 'echarts'
+import 'babel-polyfill'
 
 Vue.prototype.PublicMethod = publicMethodObj
 Vue.prototype.$echarts = echarts

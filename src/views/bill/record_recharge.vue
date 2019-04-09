@@ -6,18 +6,34 @@
       <el-button type="primary" size="small" @click="getDefaultInfo(); currentPage = 1">查询</el-button>
     </el-row>
     <el-row class="inside-container">
-      <el-table :data="tableData" size="medium" stripe>
-        <el-table-column prop="id" label="ID">
+      <el-table
+      :data="tableData"
+      :border="true"
+      size="small"
+      stripe>
+        <el-table-column
+        prop="id"
+        align="center"
+        label="ID">
         </el-table-column>
-        <el-table-column prop="cash_num" label="充值金额">
+        <el-table-column
+        prop="cash_num"
+        align="center"
+        label="充值金额">
           <template slot-scope="slot">
             <i class="iconfont iconqiandai"></i>
             {{slot.row.cash_num/100}}
           </template>
         </el-table-column>
-        <el-table-column prop="diamond_num" label="砖石数量">
+        <el-table-column
+        prop="diamond_num"
+        align="center"
+        label="砖石数量">
         </el-table-column>
-        <el-table-column prop="diamond_num" label="购买日期">
+        <el-table-column
+        prop="diamond_num"
+        align="center"
+        label="购买日期">
           <template slot-scope="slot">
             {{PublicMethod.formatDate(slot.row.datetime)}}
           </template>

@@ -1,45 +1,26 @@
 <template>
   <div id="notify">
-    <el-row class="tabs" :gutter="12">
-      <el-tabs v-model="activeName">
-        <el-tab-pane label="全部" name="first">
-          <el-col :sm="24" :md="12" v-for="(item, index) in mesInfo.allArr" :key="index">
-            <el-card class="box-card">
-              <p>标题: {{item.notice_title}} <el-tag type="danger" size="mini" v-if="item.notice_state === 0">未读</el-tag><el-tag type="success" size="mini" v-else>已读</el-tag></p>
-              <p>时间: {{PublicMethod.formatDate(item.generate_time)}}</p>
-              <p>
-                <el-button icon="el-icon-search" size="mini" circle @click="checkCardContent(item)"></el-button>
-              </p>
-            </el-card>
-          </el-col>
-        </el-tab-pane>
-        <el-tab-pane name="second">
-          <span slot="label">未读</span>
-          <el-col :sm="24" :md="12" v-for="(item, index) in mesInfo.unreadArr" :key="index">
-            <el-card class="box-card">
-              <p>标题: {{item.notice_title}} <el-tag type="danger" size="mini" v-if="item.notice_state === 0">未读</el-tag><el-tag type="success" size="mini" v-else>已读</el-tag></p>
-              <p>时间: {{PublicMethod.formatDate(item.generate_time)}}</p>
-              <p>
-                <el-button icon="el-icon-search" size="mini" circle @click="checkCardContent(item)"></el-button>
-              </p>
-            </el-card>
-          </el-col>
-        </el-tab-pane>
-        <el-tab-pane name="third">
-          <span slot="label">已读</span>
-          <el-col :sm="24" :md="12" v-for="(item, index) in mesInfo.havereadArr" :key="index">
-            <el-card class="box-card">
-              <p>标题: {{item.notice_title}} <el-tag type="danger" size="mini" v-if="item.notice_state === 0">未读</el-tag><el-tag type="success" size="mini" v-else>已读</el-tag></p>
-              <p>时间: {{PublicMethod.formatDate(item.generate_time)}}</p>
-              <p>
-                <el-button icon="el-icon-search" size="mini" circle @click="checkCardContent(item)"></el-button>
-              </p>
-            </el-card>
-          </el-col>
-        </el-tab-pane>
-      </el-tabs>
+    <el-row class="toolbar">
+      <el-select v-model="activeName" placeholder="请选择" size="small" class="w-150" clearable @change="selectType">
+        <el-option
+          v-for="item in options"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value">
+        </el-option>
+      </el-select>
     </el-row>
-
+    <el-row class="inside-container" :gutter="6">
+      <el-col :sm="24" :md="12" v-for="(item, index) in data" :key="index">
+        <el-card class="box-card">
+          <p>标题: {{item.notice_title}} <el-tag type="danger" size="mini" v-if="item.notice_state === 0">未读</el-tag><el-tag type="success" size="mini" v-else>已读</el-tag></p>
+          <p>时间: {{PublicMethod.formatDate(item.generate_time)}}</p>
+          <p>
+            <el-button icon="el-icon-search" size="mini" circle @click="checkCardContent(item)"></el-button>
+          </p>
+        </el-card>
+      </el-col>
+    </el-row>
     <el-dialog
       :title="cardContent.notice_title"
       :visible.sync="dialogVisible">
@@ -67,7 +48,20 @@ export default {
     return {
       dialogVisible: false,
       cardContent: {},
-      activeName: 'first'
+      activeName: 1,
+      options: [{
+        value: 1,
+        label: '全部'
+      },
+      {
+        value: 2,
+        label: '未读'
+      },
+      {
+        value: 3,
+        label: '已读'
+      }],
+      data: []
     }
   },
   computed: {
@@ -89,6 +83,9 @@ export default {
             this.setMesInfo(obj)
           }
         })
+        .then(() => {
+          this.selectType()
+        })
     },
     /**
      * @description 查看卡片信息
@@ -107,11 +104,30 @@ export default {
             }
           })
       }
+    },
+    /**
+     * @description Select选中事件
+     */
+    selectType () {
+      if (!this.activeName) {
+        this.activeName = 1
+      }
+      switch (this.activeName) {
+        case 1:
+          this.data = this.mesInfo.allArr
+          break
+        case 2:
+          this.data = this.mesInfo.unreadArr
+          break
+        case 3:
+          this.data = this.mesInfo.havereadArr
+          break
+      }
     }
   },
   mounted () {
     if (this.$route.query.type) {
-      this.$route.query.type === 'unread' ? this.activeName = 'second' : this.activeName = 'third'
+      this.$route.query.type === 'unread' ? this.activeName = 2 : this.activeName = 3
     }
     this.getDefaultInfo()
   }
@@ -123,25 +139,38 @@ export default {
 @import '@/style/mixin.scss';
 
 #notify{
-  height: 100%;
-  background: #fff;
-  overflow-y: auto;
-  overflow-x: hidden;
+  @include flex-box(column, flex-start, none);
   box-shadow: 0 2px 12px 0 rgba(0, 0, 0, .1);
-  .tabs{
+  background: #fff;
+  width: 100%;
+  height: 100%;
+
+  .toolbar{
     padding: 16px;
+    border-bottom: 1px solid #eef3f7;
   }
-  .box-card{
-    font-size: 13px;
-    p:last-child{
-      text-align: right
+
+  .inside-container{
+    padding: 10px;
+    flex: 1;
+    overflow: auto;
+
+    .box-card{
+      font-size: 13px;
+      p:last-child{
+        text-align: right
+      }
     }
-  }
-  .box-card:nth-of-type(2n+1){
-    margin: 5px 0
-  }
-  .el-badge__content:nth-of-type(1){
-    background: gray!important
+
+    .box-card{
+      font-size: 13px;
+      p:last-child{
+        text-align: right
+      }
+    }
+    .box-card:nth-of-type(2n+1){
+      margin: 5px 0
+    }
   }
 }
 </style>

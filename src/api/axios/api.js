@@ -25,7 +25,7 @@ import store from '@/store/store'
  * isLoginCond 是否登陆判断条件
  * regetUserApiCond 再次获取用户信息Api条件
  * isNeedRegetInfo 防止获取信息接口死循环
- * shiledApiArr 不需要再获取用户信息接口数组
+ * shiledApiArr 不需要再请求(用户信息、通知信息)的接口数组
  * }
  */
 let service = axios.create({
@@ -36,12 +36,12 @@ let service = axios.create({
 })
 let loading, userInfo, isLoginCond, regetUserApiCond
 let isNeedRegetInfo = true
-let shiledApiArr = ['auth/agent/users/', '/auth/logout', '/message/agent_notice']
+let shiledApiArr = ['/auth/login', 'auth/agent/users/', '/auth/logout', '/message/agent_notice']
 
 // 请求拦截
 service.interceptors.request.use(config => {
-  userInfo = sessionStorage.userinfo
-  isLoginCond = userInfo && userInfo !== undefined
+  userInfo = store.state.userInfo
+  isLoginCond = Object.keys(userInfo).length !== 0 && userInfo !== undefined
   if (isLoginCond) {
     loading = Loading.service({
       lock: true,
@@ -61,7 +61,7 @@ service.interceptors.response.use(response => {
     regetUserApiCond = isNeedRegetInfo && url.indexOf(shiledApiArr[0]) === -1 && url.indexOf(shiledApiArr[1]) === -1 && url.indexOf(shiledApiArr[2]) === -1
     if (regetUserApiCond) {
       isNeedRegetInfo = false
-      UserInfoApi(JSON.parse(userInfo).user_id)
+      UserInfoApi(userInfo.user_id)
         .then(res => {
           sessionStorage.setItem('userinfo', JSON.stringify(res.data.data))
           store.commit('setUserInfo', res.data.data)

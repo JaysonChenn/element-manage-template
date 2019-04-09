@@ -4,7 +4,7 @@
       <el-steps :active="step" simple>
         <el-step title="用户信息" icon="el-icon-search"></el-step>
         <el-step title="充值数量" icon="el-icon-upload"></el-step>
-        <el-step title="完成充值" icon="el-icon-check"></el-step>
+        <el-step title="完成" icon="el-icon-check"></el-step>
       </el-steps>
       <div class="inside-content">
         <div class="step-one" v-show="step === 1">
@@ -12,19 +12,39 @@
             <i class="el-icon-search"></i>
             查询用户信息
           </p>
-          <el-form :model="searchForm" :rules="searchRules" ref="searchForm" class="search-form">
-            <el-form-item prop="id">
-              <el-input v-model="searchForm.id" placeholder="请填写游戏ID"></el-input>
+          <el-form
+          :model="searchForm"
+          :rules="searchRules"
+          ref="searchForm"
+          class="search-form">
+            <el-form-item
+            prop="id">
+              <el-input
+              v-model="searchForm.id"
+              placeholder="请填写游戏ID">
+              </el-input>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" size="small" @click="searchUserInfo()">查询</el-button>
+              <el-button
+              type="primary"
+              size="small"
+              @click="searchUserInfo()">
+              查询
+              </el-button>
             </el-form-item>
           </el-form>
         </div>
         <div class="step-two" v-show="step === 2">
-          <el-form :model="chargeForm" :rules="chargeRules" ref="chargeForm" class="charge-form">
+          <el-form
+          :model="chargeForm"
+          :rules="chargeRules"
+          ref="chargeForm"
+          class="charge-form">
             <el-form-item>
-              <img class="avatar" :src="userInfo.avatar" alt="">
+              <img
+              class="avatar"
+              :src="userInfo.avatar"
+              alt="">
             </el-form-item>
             <el-form-item>
               {{userInfo.nickname}}(ID：{{userInfo.id}})
@@ -32,11 +52,20 @@
             <el-form-item>
               当前钻石({{userInfo.account_now}})
             </el-form-item>
-            <el-form-item prop="diamon">
-              <el-input v-model="chargeForm.diamon" placeholder="请输入充值钻石数"></el-input>
+            <el-form-item
+            prop="diamon">
+              <el-input
+              v-model="chargeForm.diamon"
+              placeholder="请输入充值钻石数">
+              </el-input>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" size="small" @click="chargeDiamon()">充值</el-button>
+              <el-button
+              type="primary"
+              size="small"
+              @click="chargeDiamon()">
+              充值
+              </el-button>
             </el-form-item>
           </el-form>
         </div>
