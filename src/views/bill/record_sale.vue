@@ -146,8 +146,8 @@ export default {
     }
   },
   mounted () {
-    this.getDefaultInfo()
     this.PublicMethod.bindRouteParamToData(this.$route.query, this.$data)
+    this.getDefaultInfo()
   }
 }
 </script>

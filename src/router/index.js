@@ -13,7 +13,7 @@ const ChargeWithdraw = resolve => require(['@/views/bill/record_withdraw'], reso
 const ChargeRebate = resolve => require(['@/views/bill/record_rebate'], resolve) // 返利记录
 const ReplaceRoom = resolve => require(['@/views/room/room'], resolve) // 代开房间
 const Notify = resolve => require(['@/views/notify/notify'], resolve) // 通知信息
-const AgentAgreement = resolve => require(['@/views/agreement/agreement'], resolve) // 代理协议
+// const AgentAgreement = resolve => require(['@/views/agreement/agreement'], resolve) // 代理协议
 const CompalintSuggest = resolve => require(['@/views/suggest/suggest'], resolve) // 投诉建议
 
 Vue.use(Router)
@@ -119,17 +119,17 @@ export default new Router({
       component: Notify
     }]
   },
-  {
-    path: '/agreement',
-    name: '代理协议 ',
-    icon: 'iconxieyixiangqing',
-    component: Layout,
-    children: [{
-      path: '/agreement',
-      name: '代理协议',
-      component: AgentAgreement
-    }]
-  },
+  // {
+  //   path: '/agreement',
+  //   name: '代理协议 ',
+  //   icon: 'iconxieyixiangqing',
+  //   component: Layout,
+  //   children: [{
+  //     path: '/agreement',
+  //     name: '代理协议',
+  //     component: AgentAgreement
+  //   }]
+  // },
   {
     path: '/complaintsuggest',
     name: '投诉建议 ',

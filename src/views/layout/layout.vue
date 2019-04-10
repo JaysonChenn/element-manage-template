@@ -1,62 +1,15 @@
 <template>
   <el-container id="layout">
     <!-- aside -->
-    <el-aside class="hidden-sm-and-down">
-      <el-menu :default-active="$route.path" class="el-menu-vertical-demo" :collapse="isCollapse" :router="true" :unique-opened="true"
-        background-color="#001529" text-color="#E2E2E2">
-        <el-menu-item :index="item.path" v-for="(item, index) in this.$router.options.routes.slice(2)" :key="index"
-          v-show="item.children.length == 1">
-          <i :class="`iconfont ${item.icon}`"></i>
-          <span slot="title">{{item.name}}</span>
-        </el-menu-item>
-        <el-submenu :index="items.path" v-for="(items, indexs) in this.$router.options.routes.slice(2)" :key="indexs + items.path"
-          v-show="items.children.length > 1">
-          <template slot="title">
-            <i :class="`iconfont ${items.icon}`"></i>
-            <span slot="title">{{items.name}}</span>
-          </template>
-          <el-menu-item-group>
-            <el-menu-item :index="itemchild.path" v-for="(itemchild, indexchild) in items.children" :key="indexchild">{{itemchild.name}}</el-menu-item>
-          </el-menu-item-group>
-        </el-submenu>
-      </el-menu>
-    </el-aside>
-    <MobNavbar class="hidden-md-and-up" v-on:navbarByVal="navbarByVal" :style="isMobNavbarShow? 'height: 100vh; z-index: 1000' : 'height: 0; z-index：-1'" />
+    <Navbar class="hidden-sm-and-down" />
+    <MobNavbar class="hidden-md-and-up" :style="isMobNavbarShow? 'height: 100vh; z-index: 1000' : 'height: 0; z-index：-1'" />
     <!-- container -->
-    <el-container>
-      <el-header>
-        <div class="toggle-icon hidden-sm-and-down" :style="isCollapse ? 'transform: rotate(-90deg)' : ''">
-          <i class="iconfont icontoggle" @click="isCollapse = !isCollapse"></i>
-        </div>
-        <div class="toggle-icon hidden-md-and-up">
-          <i class="iconfont icontoggle" @click="isMobNavbarShow = true"></i>
-        </div>
-        <div class="header-tool">
-          <i class="iconfont iconlv_zuanshi diamon"></i>
-          <span class="num">{{userInfo.diamond_amount}}</span>
-          <i class="iconfont iconfanli"></i>
-          <span class="num">{{userInfo.rebate_amount}}</span>
-          <el-dropdown trigger="click">
-          <span class="el-dropdown-link">
-            <el-badge v-if="mesInfo.unreadArr" :value="mesInfo.unreadArr.length" class="item">
-              <i class="el-icon-bell"></i>
-            </el-badge>
-          </span>
-          <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item class="clearfix">
-                <span @click="PublicMethod.toPage('/notify', {type: 'unread'}), reload()">未读</span>
-              <el-badge class="mark" v-if="mesInfo.unreadArr" :value="mesInfo.unreadArr.length" />
-            </el-dropdown-item>
-            <el-dropdown-item class="clearfix">
-                <span @click="PublicMethod.toPage('/notify', {type: 'haveread'}), reload()">已读</span>
-              <el-badge class="mark" v-if="mesInfo.havereadArr" :value="mesInfo.havereadArr.length" type="info"/>
-            </el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
-          <i class="iconfont icontuichudenglu" @click="signOut()"></i>
-        </div>
-      </el-header>
+    <el-container class="container">
+      <!-- header -->
+      <Header />
+      <!-- breadcrumb -->
       <Breadcrumb :name="$route.name" :path="$route.path" />
+      <!-- inside-container -->
       <el-main>
         <router-view />
       </el-main>
@@ -65,59 +18,23 @@
 </template>
 
 <script>
-import MobNavbar from '@/components/MobNavbar/MobNavbar'
 import Breadcrumb from '@/components/Breadcrumb/Breadcrumb'
+import Header from './child-components/Header'
+import Navbar from './child-components/Navbar'
+import MobNavbar from './child-components/MobnavBar'
 import {
-  SignOutApi
-} from '@/api/login'
-import {
-  mapState,
-  mapMutations
+  mapState
 } from 'vuex'
 
 export default {
-  inject: ['reload'],
   components: {
     MobNavbar,
-    Breadcrumb
-  },
-  data () {
-    return {
-      isCollapse: false,
-      isMobNavbarShow: false
-    }
+    Breadcrumb,
+    Header,
+    Navbar
   },
   computed: {
-    ...mapState(['userInfo', 'mesInfo'])
-  },
-  methods: {
-    ...mapMutations(['setUserInfo', 'setMesInfo']),
-    /**
-     * @description 退出登录
-     */
-    signOut () {
-      this.$confirm('此操作将退出后台系统, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        SignOutApi()
-          .then(res => {
-            if (res.data.code === 0) {
-              sessionStorage.removeItem('userinfo')
-              this.setMesInfo({})
-              this.setUserInfo({})
-              this.$router.push('/login')
-            }
-          })
-      }).catch(() => {})
-    },
-    /**
-     * @description MobNavbar回传值
-     */
-    navbarByVal (val) {
-      this.isMobNavbarShow = val
-    }
+    ...mapState(['isMobNavbarShow'])
   }
 }
 </script>
@@ -126,60 +43,9 @@ export default {
 // mixin scss
 @import '@/style/mixin.scss';
 
-#layout {
-  .toggle-icon {
-    float: left;
-    transform: rotate(0);
-    transition: all ease-in .3s;
-  }
-
-  .header-tool {
-    @include flex-box(row, center, center, nowrap);
-    float: right;
-    align-self: stretch;
-    cursor: pointer;
-
-    .num {
-      font-size: 13px;
-      color: #606266;
-      margin: 0 5px;
-      font-weight: bold;
-    }
-
-    .el-icon-bell{
-      font-size: 18px;
-      margin: 0 2px 0 5px;
-    }
-  }
-
-  .iconfont {
-    margin-right: 6px;
-  }
-
-  .diamon {
-    font-size: 17px;
-    margin: 0;
-    padding-bottom: 1px;
-  }
-
-  .iconlv_zuanshi{
-    font-size: 18px
-  }
-
-  .iconfanli {
-    font-size: 23px;
-    margin: 0;
-  }
-
-  .icontuichudenglu {
-    font-size: 18px;
-    margin: 0 0 0 10px;
-  }
-
-  .icontoggle {
-    font-size: 20px;
-    font-weight: bold;
-  }
+.container{
+  display: flex;
+  flex-direction: column;
 }
 
 .el-container {
@@ -187,29 +53,10 @@ export default {
   width: 100%
 }
 
-.el-menu {
-  border: none;
-}
-
-.el-header {
-  @include flex-box(row, space-between, center, nowrap);
-  background-color: #fff;
-  color: #333;
-  height: 55px !important;
-}
-
 .el-aside {
   width: auto !important;
+  overflow: hidden;
   background: #001529;
-}
-
-.el-submenu .el-menu-item {
-  text-align: center;
-  background-color: #010b15c2 !important;
-}
-
-.el-menu-vertical-demo:not(.el-menu--collapse) {
-  width: 200px;
 }
 
 .el-main {

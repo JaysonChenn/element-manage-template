@@ -41,7 +41,7 @@
         label="充值金额">
           <template slot-scope="slot">
             <i class="iconfont iconqiandai"></i>
-            {{slot.row.cash_num/100}}
+            {{slot.row.price/100}}
           </template>
         </el-table-column>
         <el-table-column
@@ -54,7 +54,7 @@
         align="center"
         label="购买日期">
           <template slot-scope="slot">
-            {{PublicMethod.formatDate(slot.row.datetime)}}
+            {{PublicMethod.formatDate(slot.row.updated_time)}}
           </template>
         </el-table-column>
       </el-table>
@@ -99,7 +99,6 @@ export default {
      * {
      *  sum_data 是否计算总数
      *  order 默认排序
-     *  created_time__gte 最近3天数据
      *  price__gte 充值范围起
      *  price__lte 充值范围止
      *  size 数据数量
@@ -111,8 +110,8 @@ export default {
       let param = {
         sum_data: 'yes',
         order: 'desc',
-        // created_time__gte: new Date(new Date().setHours(0, 0, 0, 0)) * 1 - 86400000 * 3,
-        // status: 40,
+        status: 40,
+        agent_id: '',
         price__gte: this.chargeStart * 100 === 0 ? '' : this.chargeStart * 100,
         price__lte: this.chargeEnd * 100 === 0 ? '' : this.chargeEnd * 100,
         size: this.pageSize,
@@ -128,8 +127,8 @@ export default {
     }
   },
   mounted () {
-    this.getDefaultInfo()
     this.PublicMethod.bindRouteParamToData(this.$route.query, this.$data)
+    this.getDefaultInfo()
   }
 }
 </script>

@@ -6,7 +6,9 @@ const store = new Vuex.Store({
   state: {
     userInfo: {},
     mesInfo: {},
-    currentRoute: {}
+    currentRoute: {},
+    isCollapse: false,
+    isMobNavbarShow: false
   },
   mutations: {
     setUserInfo (state, data) {
@@ -17,6 +19,12 @@ const store = new Vuex.Store({
     },
     setCurrentRoute (state, data) {
       state.currentRoute = data
+    },
+    setCollaspse (state) {
+      state.isCollapse = !state.isCollapse
+    },
+    setMobNavbarShow (state) {
+      state.isMobNavbarShow = !state.isMobNavbarShow
     }
   }
 })

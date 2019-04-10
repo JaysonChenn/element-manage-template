@@ -168,8 +168,9 @@ export default {
     .inside-content{
       @include flex-box(column, flex-start, center, nowrap);
       flex: 1;
+      overflow: auto;
+      overflow-x: hidden;
       .step-one{
-        margin-top: 30px;
         flex: 1;
         align-self: stretch;
         .card{

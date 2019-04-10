@@ -1,7 +1,7 @@
 <template>
   <div id="mobnavbar">
     <header>
-      <i class="iconfont iconquxiao" @click="cancelNavbar"></i>
+      <i class="iconfont iconquxiao" @click="setMobNavbarShow"></i>
     </header>
     <section>
       <ul>
@@ -13,7 +13,7 @@
           </div>
           <div class="select-content" :style="item.isSelected? 'display: block' : 'display: none'">
             <p v-show="item.children.length > 1" v-for="(itemChild, indexChild) in item.children" :key="indexChild"
-              @click="toPage(itemChild.path, ''); cancelNavbar()">
+              @click="PublicMethod.toPage(itemChild.path, ''); setMobNavbarShow()">
               <span :class="[$route.path == itemChild.path ? 'active-navbar' : '']">{{itemChild.name}}</span>
             </p>
           </div>
@@ -24,6 +24,10 @@
 </template>
 
 <script>
+import {
+  mapMutations
+} from 'vuex'
+
 export default {
   data () {
     return {
@@ -31,23 +35,7 @@ export default {
     }
   },
   methods: {
-    /**
-     * @description 页面跳转
-     */
-    toPage (path, params) {
-      this.$router.push({
-        path: path,
-        query: params
-      })
-    },
-
-    /**
-     * @description 取消弹框
-     */
-    cancelNavbar () {
-      this.$emit('navbarByVal', false)
-    },
-
+    ...mapMutations(['setMobNavbarShow']),
     /**
      * @description 侧边栏数据重置
      */
@@ -79,8 +67,8 @@ export default {
               item.isSelected = false
             };
           })
-          this.toPage(items.path, '')
-          this.cancelNavbar()
+          this.PublicMethod.toPage(items.path, '')
+          this.setMobNavbarShow()
           break
       }
     }
