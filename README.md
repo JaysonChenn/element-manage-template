@@ -1,6 +1,6 @@
 # agent-admin
 
-> A Vue.js project
+> 代理后台管理系统
 
 ## Build Setup
 

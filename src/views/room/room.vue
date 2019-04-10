@@ -12,12 +12,21 @@
             <i class="el-icon-search"></i>
             查询用户信息
           </p>
-          <el-form :model="searchForm" :rules="searchRules" ref="searchForm" class="search-form">
+          <el-form
+          :model="searchForm"
+          :rules="searchRules"
+          ref="searchForm"
+          class="search-form">
             <el-form-item prop="id">
-              <el-input v-model="searchForm.id" placeholder="请填写游戏ID"></el-input>
+              <el-input
+              v-model="searchForm.id"
+              placeholder="请填写游戏ID"></el-input>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" size="small" @click="searchUserInfo()">查询</el-button>
+              <el-button
+              type="primary"
+              size="small"
+              @click="searchUserInfo()">查询</el-button>
             </el-form-item>
           </el-form>
         </div>
@@ -33,7 +42,10 @@
               当前钻石({{playerInfo.account_now}})
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" size="small" @click="bindUser()">绑定</el-button>
+              <el-button
+              type="primary"
+              size="small"
+              @click="bindUser()">绑定</el-button>
             </el-form-item>
           </el-form>
         </div>

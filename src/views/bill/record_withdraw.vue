@@ -1,13 +1,42 @@
 <template>
   <div id="recordwithdraw" class="container">
     <el-row class="toolbar">
-      <el-select v-model="payTypeId" placeholder="选择支付方式" size="small" class="w-150" clearable>
-        <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+      <el-select
+      v-model="payTypeId"
+      placeholder="选择支付方式"
+      size="small"
+      class="w-150"
+      clearable
+      @change="PublicMethod.toPage('/mybill/chargewithdraw', PublicMethod.removeProperty({payTypeId: payTypeId, withdrawStart: withdrawStart, withdrawEnd: withdrawEnd}))">
+        <el-option
+        v-for="item in options"
+        :key="item.value"
+        :label="item.label"
+        :value="item.value">
         </el-option>
       </el-select>
-      <el-input v-model="withdrawStart" placeholder="提现范围起" size="small" class="input w-150" clearable></el-input><span class="arrow">-</span>
-      <el-input v-model="withdrawEnd" placeholder="提现范围止" size="small" class="input w-150" clearable></el-input>
-      <el-button type="primary" size="small" @click="getDefaultInfo(); currentPage = 1">查询</el-button>
+      <el-input
+      v-model="withdrawStart"
+      @input="PublicMethod.toPage('/mybill/chargewithdraw', PublicMethod.removeProperty({payTypeId: payTypeId, withdrawStart: withdrawStart, withdrawEnd: withdrawEnd}))"
+      placeholder="提现范围起"
+      size="small"
+      class="input w-150"
+      clearable>
+      </el-input>
+      <span class="arrow">-</span>
+      <el-input
+      v-model="withdrawEnd"
+      @input="PublicMethod.toPage('/mybill/chargewithdraw', PublicMethod.removeProperty({payTypeId: payTypeId, withdrawStart: withdrawStart, withdrawEnd: withdrawEnd}))"
+      placeholder="提现范围止"
+      size="small"
+      class="input w-150"
+      clearable>
+      </el-input>
+      <el-button
+      type="primary"
+      size="small"
+      @click="getDefaultInfo(); currentPage = 1"
+      >查询</el-button>
     </el-row>
     <el-row class="inside-container">
       <el-table
@@ -161,6 +190,7 @@ export default {
   },
   mounted () {
     this.getDefaultInfo()
+    this.PublicMethod.bindRouteParamToData(this.$route.query, this.$data)
   }
 }
 </script>

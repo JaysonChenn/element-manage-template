@@ -3,15 +3,33 @@
     <canvas id="canvas" class="canvas"></canvas>
     <section class="form">
       <p class="form-head">代理后台</p>
-      <el-form :model="loginForm" :rules="rules" ref="loginForm" class="demo-ruleForm">
+      <el-form
+      :model="loginForm"
+      :rules="rules"
+      ref="loginForm"
+      class="demo-ruleForm">
         <el-form-item prop="agent_phone">
-          <el-input prefix-icon="iconfont iconusername" placeholder="请输入用户名" v-model="loginForm.agent_phone" size="medium"
-            type="text"></el-input>
+          <el-input
+          prefix-icon="iconfont iconusername"
+          placeholder="请输入用户名"
+          v-model="loginForm.agent_phone"
+          size="medium"
+          type="text">
+          </el-input>
         </el-form-item>
         <el-form-item prop="password">
-          <el-input prefix-icon="iconfont iconmima" placeholder="请输入密码" v-model="loginForm.password" size="medium" type="password"></el-input>
+          <el-input
+          prefix-icon="iconfont iconmima"
+          placeholder="请输入密码"
+          v-model="loginForm.password"
+          size="medium"
+          type="password">
+          </el-input>
         </el-form-item>
-        <el-button type="primary" size="small" @click="submitLogin" :loading="btnLoading">登录</el-button>
+        <el-button
+        type="primary"
+        size="small"
+        @click="submitLogin" :loading="btnLoading">登录</el-button>
         <p class="tips">请输入用户名密码登陆</p>
       </el-form>
     </section>

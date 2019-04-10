@@ -36,5 +36,26 @@ export default {
       path: path,
       query: params
     })
+  },
+
+  /**
+   * @description 路由参数与data中值绑定
+   * @param
+   * {
+   *  param对象中的键值!!其键值必须为工具栏(输入框、选择框、DatePicker等)在data中绑定的值
+   *  例: data: { a: '' }
+   *      param: { a: this.a }
+   * }
+   */
+  bindRouteParamToData (route, data) {
+    if (Object.keys(route).length !== 0) {
+      for (let i in route) {
+        for (let j in data) {
+          if (i === j) {
+            data[j] = Number(route[i])
+          }
+        }
+      }
+    }
   }
 }

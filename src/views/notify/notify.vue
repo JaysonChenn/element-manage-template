@@ -1,7 +1,13 @@
 <template>
   <div id="notify">
     <el-row class="toolbar">
-      <el-select v-model="activeName" placeholder="请选择" size="small" class="w-150" clearable @change="selectType">
+      <el-select
+      v-model="activeName"
+      placeholder="请选择"
+      size="small"
+      class="w-150"
+      clearable
+      @change="selectType">
         <el-option
           v-for="item in options"
           :key="item.value"
@@ -10,8 +16,14 @@
         </el-option>
       </el-select>
     </el-row>
-    <el-row class="inside-container" :gutter="6">
-      <el-col :sm="24" :md="12" v-for="(item, index) in data" :key="index">
+    <el-row
+    class="inside-container"
+    :gutter="6">
+      <el-col
+      :sm="24"
+      :md="12"
+      v-for="(item, index) in data"
+      :key="index">
         <el-card class="box-card">
           <p>标题: {{item.notice_title}} <el-tag type="danger" size="mini" v-if="item.notice_state === 0">未读</el-tag><el-tag type="success" size="mini" v-else>已读</el-tag></p>
           <p>时间: {{PublicMethod.formatDate(item.generate_time)}}</p>
@@ -26,7 +38,10 @@
       :visible.sync="dialogVisible">
       <span>{{cardContent.notice_content}}</span>
       <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="dialogVisible = false" size="mini">确 定</el-button>
+        <el-button
+        type="primary"
+        @click="dialogVisible = false"
+        size="mini">确 定</el-button>
       </span>
     </el-dialog>
   </div>

@@ -61,24 +61,50 @@
     </el-row>
     <el-row class="footer"></el-row>
 
-    <el-dialog title="充值砖石" :visible.sync="chargeToast" width="50%" @close="resetForm()">
-      <el-form :model="chargeForm" ref="chargeForm" :rules="chargeRules">
-        <el-form-item class="user-avatar">
-          <img :src="userInfo.avatar" alt="">
+    <el-dialog
+    title="充值砖石"
+    :visible.sync="chargeToast"
+    width="50%"
+    @close="resetForm()">
+      <el-form
+      :model="chargeForm"
+      ref="chargeForm"
+      :rules="chargeRules">
+        <el-form-item
+        class="user-avatar">
+          <img
+          :src="userInfo.avatar"
+          alt="">
         </el-form-item>
-        <el-form-item class="user-nickname">
+        <el-form-item
+        class="user-nickname">
           {{userInfo.nickname}}(ID: {{userInfo.player_id}})
         </el-form-item>
-        <el-form-item class="user-nickname">
+        <el-form-item
+        class="user-nickname">
           当前钻石：{{userInfo.account_now}}
         </el-form-item>
-        <el-form-item class="user-diamon" prop="diamon">
-          <el-input v-model="chargeForm.diamon" placeholder="请输入充值砖石数" size="small" width="50%"></el-input>
+        <el-form-item
+        class="user-diamon"
+        prop="diamon">
+          <el-input
+          v-model="chargeForm.diamon"
+          placeholder="请输入充值砖石数"
+          size="small"
+          width="50%">
+          </el-input>
         </el-form-item>
       </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="chargeToast = false" size="small">取 消</el-button>
-        <el-button type="primary" @click="submitForm()" size="small">确 定</el-button>
+      <div
+      slot="footer"
+      class="dialog-footer">
+        <el-button
+        @click="chargeToast = false"
+        size="small">取 消</el-button>
+        <el-button
+        type="primary"
+        @click="submitForm()"
+        size="small">确 定</el-button>
       </div>
     </el-dialog>
   </div>

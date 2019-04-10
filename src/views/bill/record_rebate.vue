@@ -1,10 +1,36 @@
 <template>
   <div id="recordrebate">
     <el-row class="toolbar">
-      <el-input v-model="agentId" placeholder="代理ID" size="small" class="input w-150" clearable></el-input>
-      <el-input v-model="diamonStart" placeholder="砖石范围起" size="small" class="input w-150" clearable></el-input><span class="arrow">-</span>
-      <el-input v-model="diamonEnd" placeholder="砖石范围止" size="small" class="input w-150" clearable></el-input>
-      <el-button type="primary" size="small" @click="getDefaultInfo(); currentPage = 1">查询</el-button>
+      <el-input
+      v-model="agentId"
+      @input="PublicMethod.toPage('/mybill/chargerebate', PublicMethod.removeProperty({agentId: agentId, diamonStart: diamonStart, diamonEnd: diamonEnd}))"
+      placeholder="代理ID"
+      size="small"
+      class="input w-150"
+      clearable>
+      </el-input>
+      <el-input
+      v-model="diamonStart"
+      @input="PublicMethod.toPage('/mybill/chargerebate', PublicMethod.removeProperty({agentId: agentId, diamonStart: diamonStart, diamonEnd: diamonEnd}))"
+      placeholder="砖石范围起"
+      size="small"
+      class="input w-150"
+      clearable>
+      </el-input>
+      <span class="arrow">-</span>
+      <el-input
+      v-model="diamonEnd"
+      @input="PublicMethod.toPage('/mybill/chargerebate', PublicMethod.removeProperty({agentId: agentId, diamonStart: diamonStart, diamonEnd: diamonEnd}))"
+      placeholder="砖石范围止"
+      size="small"
+      class="input w-150"
+      clearable>
+      </el-input>
+      <el-button
+      type="primary"
+      size="small"
+      @click="getDefaultInfo(); currentPage = 1"
+      >查询</el-button>
     </el-row>
     <el-row class="inside-container">
       <el-table
@@ -118,6 +144,7 @@ export default {
   },
   mounted () {
     this.getDefaultInfo()
+    this.PublicMethod.bindRouteParamToData(this.$route.query, this.$data)
   }
 }
 </script>

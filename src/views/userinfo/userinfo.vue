@@ -71,25 +71,33 @@
             <el-col @click="checkAgent()" class="col" :md="24" :lg="12">
               <div class="icon">
                 <p class="title">下级代理数</p>
-                <p class="num" v-if="userInfo.child_agents">{{userInfo.child_agents.length}}</p>
+                <p class="num" v-if="userInfo.child_agents">
+                  <CountTo :startVal='0' :endVal='userInfo.child_agents.length' :duration='2500'></CountTo>
+                </p>
               </div>
             </el-col>
             <el-col class="col" :md="24" :lg="12">
               <div class="icon">
                 <p class="title">剩余钻石数</p>
-                <p class="num">{{userInfo.diamond_amount}}</p>
+                <p class="num">
+                  <CountTo :startVal='0' :endVal='userInfo.diamond_amount' :duration='2500'></CountTo>
+                </p>
               </div>
             </el-col>
             <el-col class="col" :md="24" :lg="12">
               <div class="icon">
                 <p class="title">总返利钻石数</p>
-                <p class="num">{{userInfo.rebate_all}}</p>
+                <p class="num">
+                  <CountTo :startVal='0' :endVal='userInfo.rebate_all' :duration='2500'></CountTo>
+                </p>
               </div>
             </el-col>
             <el-col class="col" :md="24" :lg="12">
               <div class="icon">
                 <p class="title">可领取砖石数</p>
-                <p class="num">{{userInfo.rebate_amount}}</p>
+                <p class="num">
+                  <CountTo :startVal='0' :endVal='userInfo.rebate_amount' :duration='2500'></CountTo>
+                </p>
               </div>
             </el-col>
           </el-row>
@@ -119,10 +127,12 @@ import {
   mapState,
   mapMutations
 } from 'vuex'
+import CountTo from 'vue-count-to'
 
 export default {
   components: {
-    Breadcrumb
+    Breadcrumb,
+    CountTo
   },
   inject: ['reload'],
   data () {

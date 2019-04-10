@@ -1,9 +1,28 @@
 <template>
   <div id="recordrecharge">
     <el-row class="toolbar">
-      <el-input v-model="chargeStart" placeholder="充值范围起" size="small" class="input w-150" clearable></el-input><span class="arrow">-</span>
-      <el-input v-model="chargeEnd" placeholder="充值范围止" size="small" class="input w-150" clearable></el-input>
-      <el-button type="primary" size="small" @click="getDefaultInfo(); currentPage = 1">查询</el-button>
+      <el-input
+      v-model="chargeStart"
+      @input="PublicMethod.toPage('/mybill/chargerecord', PublicMethod.removeProperty({chargeStart: chargeStart, chargeEnd: chargeEnd}))"
+      placeholder="充值范围起"
+      size="small"
+      class="input w-150"
+      clearable>
+      </el-input>
+      <span class="arrow">-</span>
+      <el-input
+      v-model="chargeEnd"
+      @input="PublicMethod.toPage('/mybill/chargerecord', PublicMethod.removeProperty({chargeStart: chargeStart, chargeEnd: chargeEnd}))"
+      placeholder="充值范围止"
+      size="small"
+      class="input w-150"
+      clearable>
+      </el-input>
+      <el-button
+      type="primary"
+      size="small"
+      @click="getDefaultInfo(); currentPage = 1"
+      >查询</el-button>
     </el-row>
     <el-row class="inside-container">
       <el-table
@@ -110,6 +129,7 @@ export default {
   },
   mounted () {
     this.getDefaultInfo()
+    this.PublicMethod.bindRouteParamToData(this.$route.query, this.$data)
   }
 }
 </script>
