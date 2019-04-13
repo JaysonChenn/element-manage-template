@@ -64,7 +64,7 @@
     <el-dialog
     title="充值砖石"
     :visible.sync="chargeToast"
-    width="50%"
+    width="300px"
     @close="resetForm()">
       <el-form
       :model="chargeForm"

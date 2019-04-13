@@ -48,20 +48,4 @@ export default {
   flex-direction: column;
 }
 
-.el-container {
-  height: 100%;
-  width: 100%
-}
-
-.el-aside {
-  width: auto !important;
-  overflow: hidden;
-  background: #001529;
-}
-
-.el-main {
-  background-color: #E9EEF3;
-  color: #333;
-  padding: 20px 10px
-}
 </style>

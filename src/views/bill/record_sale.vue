@@ -1,6 +1,7 @@
 <template>
   <div id="recordsale">
-    <el-row class="toolbar">
+    <!-- pc -->
+    <el-row class="hidden-sm-and-down toolbar-pc">
       <el-input
       v-model="playId"
       @input="PublicMethod.toPage('/mybill/chargesale', PublicMethod.removeProperty({playId: playId, diamonStart: diamonStart, diamonEnd: diamonEnd}))"
@@ -29,6 +30,38 @@
       <el-button
       type="primary"
       size="small"
+      @click="getDefaultInfo(); currentPage = 1"
+      >查询</el-button>
+    </el-row>
+    <!-- mobile -->
+    <el-row class="hidden-md-and-up toolbar-mobile">
+      <el-input
+      v-model="playId"
+      @input="PublicMethod.toPage('/mybill/chargesale', PublicMethod.removeProperty({playId: playId, diamonStart: diamonStart, diamonEnd: diamonEnd}))"
+      placeholder="玩家ID"
+      size="mini"
+      clearable>
+      </el-input>
+      <el-input
+      v-model="diamonStart"
+      @input="PublicMethod.toPage('/mybill/chargesale', PublicMethod.removeProperty({playId: playId, diamonStart: diamonStart, diamonEnd: diamonEnd}))"
+      placeholder="砖石范围起"
+      class="input"
+      size="mini"
+      clearable>
+      </el-input>
+      <el-input
+      v-model="diamonEnd"
+      @input="PublicMethod.toPage('/mybill/chargesale', PublicMethod.removeProperty({playId: playId, diamonStart: diamonStart, diamonEnd: diamonEnd}))"
+      placeholder="砖石范围止"
+      class="input"
+      size="mini"
+      clearable>
+      </el-input>
+      <el-button
+      class="button"
+      type="primary"
+      size="mini"
       @click="getDefaultInfo(); currentPage = 1"
       >查询</el-button>
     </el-row>
@@ -163,16 +196,28 @@ export default {
   width: 100%;
   height: 100%;
 
-  .toolbar{
+  .toolbar-pc{
     padding: 16px;
     border-bottom: 1px solid #eef3f7;
-
     .el-button+.el-button {
       margin: 0;
     }
-
     .arrow {
       color: #C0C4CC;
+    }
+  }
+
+  .toolbar-mobile{
+    padding: 10px;
+    border-bottom: 1px solid #eef3f7;
+    .input{
+      margin: 10px 0
+    }
+    .input:nth-of-type(3){
+      margin-top: 0;
+    }
+    .button{
+      width: 100%
     }
   }
 

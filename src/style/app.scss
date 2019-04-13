@@ -37,3 +37,28 @@ a, abbr, acronym, address, applet, article, aside, audio, b, big, blockquote, ca
 .el-submenu__title{
     font-size: 13px
 }
+
+.el-message-box{
+    width: 300px!important
+}
+
+.el-message{
+    min-width: 280px!important
+}
+
+.el-container {
+    height: 100%;
+    width: 100%
+}
+
+.el-aside {
+    width: auto !important;
+    overflow: hidden;
+    background: #001529;
+}
+
+.el-main {
+    background-color: #E9EEF3;
+    color: #333;
+    padding: 20px 10px
+}

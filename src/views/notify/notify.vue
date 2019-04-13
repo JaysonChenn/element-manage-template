@@ -1,11 +1,29 @@
 <template>
   <div id="notify">
-    <el-row class="toolbar">
+    <!-- pc -->
+    <el-row class="hidden-sm-and-down toolbar-pc">
       <el-select
       v-model="activeName"
       placeholder="请选择"
       size="small"
       class="w-150"
+      clearable
+      @change="selectType">
+        <el-option
+          v-for="item in options"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value">
+        </el-option>
+      </el-select>
+    </el-row>
+    <!-- mobile -->
+    <el-row class="hidden-md-and-up toolbar-mobile">
+      <el-select
+      v-model="activeName"
+      placeholder="请选择"
+      size="mini"
+      class="select"
       clearable
       @change="selectType">
         <el-option
@@ -34,14 +52,11 @@
       </el-col>
     </el-row>
     <el-dialog
+      fullscreen
       :title="cardContent.notice_title"
       :visible.sync="dialogVisible">
       <span>{{cardContent.notice_content}}</span>
       <span slot="footer" class="dialog-footer">
-        <el-button
-        type="primary"
-        @click="dialogVisible = false"
-        size="mini">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -160,9 +175,17 @@ export default {
   width: 100%;
   height: 100%;
 
-  .toolbar{
+  .toolbar-pc{
     padding: 16px;
     border-bottom: 1px solid #eef3f7;
+  }
+
+  .toolbar-mobile{
+    padding: 10px;
+    border-bottom: 1px solid #eef3f7;
+    .select{
+      width: 100%
+    }
   }
 
   .inside-container{

@@ -1,9 +1,16 @@
 <template>
   <div id="room">
     <div class="havebind-container" v-if="playerId == 0">
-      <el-steps :active="step" simple>
+      <!-- pc -->
+      <el-steps :active="step" simple class="hidden-sm-and-down">
         <el-step title="用户信息" icon="el-icon-search"></el-step>
         <el-step title="绑定用户" icon="el-icon-upload"></el-step>
+        <el-step title="完成" icon="el-icon-check"></el-step>
+      </el-steps>
+      <!-- mobile -->
+      <el-steps :active="step" simple class="hidden-md-and-up">
+        <el-step title="查询" icon="el-icon-search"></el-step>
+        <el-step title="绑定" icon="el-icon-upload"></el-step>
         <el-step title="完成" icon="el-icon-check"></el-step>
       </el-steps>
       <div class="inside-content">

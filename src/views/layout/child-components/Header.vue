@@ -115,6 +115,7 @@ export default {
   color: #333;
   height: 55px !important;
   width: 100%;
+  box-shadow: 0 2px 4px rgba(0,0,0,.1);
   .toggle-icon {
     float: left;
     transform: rotate(0);
@@ -125,7 +126,6 @@ export default {
     @include flex-box(row, center, center, nowrap);
     float: right;
     align-self: stretch;
-    cursor: pointer;
 
     .num {
       font-size: 13px;
@@ -137,6 +137,7 @@ export default {
     .el-icon-bell{
       font-size: 18px;
       margin: 0 2px 0 5px;
+      cursor: pointer;
     }
   }
 
@@ -160,12 +161,14 @@ export default {
   }
 
   .iconxieyixiangqing{
-    margin: 0 6px
+    margin: 0 6px;
+    cursor: pointer;
   }
 
   .icontuichudenglu {
     font-size: 18px;
     margin: 0 0 0 10px;
+    cursor: pointer;
   }
 
   .icontoggle {

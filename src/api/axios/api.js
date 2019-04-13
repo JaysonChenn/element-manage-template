@@ -11,6 +11,7 @@ import {
   NotifyMesApi
 } from '@/api/notify'
 import store from '@/store/store'
+import router from '@/router/index'
 
 /**
  * @param{
@@ -46,6 +47,7 @@ service.interceptors.request.use(config => {
     loading = Loading.service({
       lock: true,
       text: '加载中...',
+      spinner: 'el-icon-loading',
       background: 'rgba(0, 0, 0, 0.7)'
     })
   }
@@ -88,49 +90,101 @@ service.interceptors.response.use(response => {
   if (isLoginCond) {
     loading.close()
   }
-  if (error && error.response) {
-    switch (error.response.status) {
-      case 400:
-        error.message = '错误请求'
-        break
-      case 401:
-        error.message = '未授权，请重新登录'
-        break
-      case 403:
-        error.message = '拒绝访问'
-        break
-      case 404:
-        error.message = '请求错误,未找到该资源'
-        break
-      case 405:
-        error.message = '请求方法未允许'
-        break
-      case 408:
-        error.message = '请求超时'
-        break
-      case 500:
-        error.message = '服务器端出错'
-        break
-      case 501:
-        error.message = '网络未实现'
-        break
-      case 502:
-        error.message = '网络错误'
-        break
-      case 503:
-        error.message = '服务不可用'
-        break
-      case 504:
-        error.message = '网络超时'
-        break
-      case 505:
-        error.message = 'http版本不支持该请求'
-        break
-      default:
-        error.message = `连接错误${error.response.status}`
+  if (error.response.status !== 400) {
+    if (error && error.response) {
+      switch (error.response.status) {
+        case 401:
+          error.message = '未授权，请重新登录'
+          break
+        case 403:
+          error.message = '拒绝访问'
+          break
+        case 404:
+          error.message = '请求错误,未找到该资源'
+          break
+        case 405:
+          error.message = '请求方法未允许'
+          break
+        case 408:
+          error.message = '请求超时'
+          break
+        case 500:
+          error.message = '服务器端出错'
+          break
+        case 501:
+          error.message = '网络未实现'
+          break
+        case 502:
+          error.message = '网络错误'
+          break
+        case 503:
+          error.message = '服务不可用'
+          break
+        case 504:
+          error.message = '网络超时'
+          break
+        case 505:
+          error.message = 'http版本不支持该请求'
+          break
+        default:
+          error.message = `连接错误${error.response.status}`
+      }
+    } else {
+      error.message = '连接到服务器失败'
     }
   } else {
-    error.message = '连接到服务器失败'
+    switch (error.response.data.code) {
+      case 2001:
+        error.message = '用户不存在'
+        break
+      case 2002:
+        error.message = '手机号或密码错误'
+        break
+      case 2003:
+        router.push('/login')
+        break
+      case 2004:
+        error.message = '用户不存在'
+        break
+      case 2005:
+        error.message = '登录用户不是代理账号'
+        break
+      case 2006:
+        error.message = '账户冻结中'
+        break
+      case 4012:
+        error.message = '请求参数有误'
+        break
+      case 4028:
+        error.message = '系统处理错误'
+        break
+      case 4031:
+        error.message = '玩家不存在'
+        break
+      case 4033:
+        error.message = '订单号已经存在'
+        break
+      case 4036:
+        error.message = '充值数据有误'
+        break
+      case 4037:
+        error.message = '剩余砖石数不够'
+        break
+      case 4041:
+        error.message = '请求游戏后台错误'
+        break
+      case 6002:
+        error.message = '请求游戏后台失败'
+        break
+      case 6003:
+        error.message = '玩家不存在'
+        break
+      case 6018:
+        error.message = '代理ID不存在'
+        break
+      default:
+        error.message = `客户端错误${error.response.status}`
+    }
   }
   return Promise.reject(error.message)
 })

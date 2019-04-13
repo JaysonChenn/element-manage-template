@@ -1,6 +1,7 @@
 <template>
   <div id="recordwithdraw" class="container">
-    <el-row class="toolbar">
+    <!-- pc -->
+    <el-row class="hidden-sm-and-down toolbar-pc">
       <el-select
       v-model="payTypeId"
       placeholder="选择支付方式"
@@ -35,6 +36,45 @@
       <el-button
       type="primary"
       size="small"
+      @click="getDefaultInfo(); currentPage = 1"
+      >查询</el-button>
+    </el-row>
+    <!-- mobile -->
+    <el-row class="hidden-md-and-up toolbar-mobile">
+      <el-select
+      class="select"
+      v-model="payTypeId"
+      placeholder="选择支付方式"
+      size="mini"
+      clearable
+      @change="PublicMethod.toPage('/mybill/chargewithdraw', PublicMethod.removeProperty({payTypeId: payTypeId, withdrawStart: withdrawStart, withdrawEnd: withdrawEnd}))">
+        <el-option
+        v-for="item in options"
+        :key="item.value"
+        :label="item.label"
+        :value="item.value">
+        </el-option>
+      </el-select>
+      <el-input
+      v-model="withdrawStart"
+      @input="PublicMethod.toPage('/mybill/chargewithdraw', PublicMethod.removeProperty({payTypeId: payTypeId, withdrawStart: withdrawStart, withdrawEnd: withdrawEnd}))"
+      placeholder="提现范围起"
+      size="mini"
+      class="input"
+      clearable>
+      </el-input>
+      <el-input
+      v-model="withdrawEnd"
+      @input="PublicMethod.toPage('/mybill/chargewithdraw', PublicMethod.removeProperty({payTypeId: payTypeId, withdrawStart: withdrawStart, withdrawEnd: withdrawEnd}))"
+      placeholder="提现范围止"
+      size="mini"
+      class="input"
+      clearable>
+      </el-input>
+      <el-button
+      type="primary"
+      size="mini"
+      class="button"
       @click="getDefaultInfo(); currentPage = 1"
       >查询</el-button>
     </el-row>
@@ -206,12 +246,28 @@ export default {
   width: 100%;
   height: 100%;
 
-  .toolbar {
+  .toolbar-pc{
     padding: 16px;
     border-bottom: 1px solid #eef3f7;
-
     .el-button+.el-button {
       margin: 0;
+    }
+  }
+
+  .toolbar-mobile{
+    padding: 10px;
+    border-bottom: 1px solid #eef3f7;
+    .select{
+      width: 100%
+    }
+    .input{
+      margin: 10px 0
+    }
+    .input:nth-of-type(3){
+      margin-top: 0
+    }
+    .button{
+      width: 100%
     }
   }
 

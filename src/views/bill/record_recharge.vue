@@ -1,6 +1,7 @@
 <template>
   <div id="recordrecharge">
-    <el-row class="toolbar">
+    <!-- pc -->
+    <el-row class="hidden-sm-and-down toolbar-pc">
       <el-input
       v-model="chargeStart"
       @input="PublicMethod.toPage('/mybill/chargerecord', PublicMethod.removeProperty({chargeStart: chargeStart, chargeEnd: chargeEnd}))"
@@ -21,6 +22,30 @@
       <el-button
       type="primary"
       size="small"
+      @click="getDefaultInfo(); currentPage = 1"
+      >查询</el-button>
+    </el-row>
+    <!-- mobile -->
+    <el-row class="hidden-md-and-up toolbar-mobile">
+      <el-input
+      v-model="chargeStart"
+      @input="PublicMethod.toPage('/mybill/chargerecord', PublicMethod.removeProperty({chargeStart: chargeStart, chargeEnd: chargeEnd}))"
+      placeholder="充值范围起"
+      size="mini"
+      clearable>
+      </el-input>
+      <el-input
+      v-model="chargeEnd"
+      @input="PublicMethod.toPage('/mybill/chargerecord', PublicMethod.removeProperty({chargeStart: chargeStart, chargeEnd: chargeEnd}))"
+      placeholder="充值范围止"
+      size="mini"
+      class="input"
+      clearable>
+      </el-input>
+      <el-button
+      class="button"
+      type="primary"
+      size="mini"
       @click="getDefaultInfo(); currentPage = 1"
       >查询</el-button>
     </el-row>
@@ -143,16 +168,25 @@ export default {
   background: #fff;
   width: 100%;
   height: 100%;
-  .toolbar{
+  .toolbar-pc{
     padding: 16px;
     border-bottom: 1px solid #eef3f7;
-
     .el-button+.el-button {
       margin: 0;
     }
-
     .arrow {
       color: #C0C4CC;
+    }
+  }
+
+  .toolbar-mobile{
+    padding: 10px;
+    border-bottom: 1px solid #eef3f7;
+    .button{
+      width: 100%
+    }
+    .input{
+      margin: 10px 0
     }
   }
 

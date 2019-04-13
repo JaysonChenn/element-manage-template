@@ -2,6 +2,45 @@
   <div id="userinfo">
     <el-row :gutter="10" style="width: 100%">
       <el-col :md="24" :lg="12">
+        <div class="other-info">
+          <div class="head">砖石相关</div>
+          <el-row class="body">
+            <el-col class="col" :md="24" :lg="12">
+              <div class="icon">
+                <p class="title">总返利钻石数</p>
+                <p class="num">
+                  <CountTo :startVal='0' :endVal='userInfo.rebate_all' :duration='2500'></CountTo>
+                </p>
+              </div>
+            </el-col>
+            <el-col class="col" :md="24" :lg="12">
+              <div class="icon">
+                <p class="title">可领取砖石数</p>
+                <p class="num">
+                  <CountTo :startVal='0' :endVal='userInfo.rebate_amount' :duration='2500'></CountTo>
+                </p>
+              </div>
+            </el-col>
+            <el-col class="col" :md="24" :lg="12">
+              <div class="icon">
+                <p class="title">剩余钻石数</p>
+                <p class="num">
+                  <CountTo :startVal='0' :endVal='userInfo.diamond_amount' :duration='2500'></CountTo>
+                </p>
+              </div>
+            </el-col>
+            <el-col @click="checkAgent()" class="col" :md="24" :lg="12">
+              <div class="icon">
+                <p class="title">下级代理数<i class="el-icon-document check-icon" @click="checkAgent"></i></p>
+                <p class="num" v-if="userInfo.child_agents">
+                  <CountTo :startVal='0' :endVal='userInfo.child_agents.length' :duration='2500'></CountTo>
+                </p>
+              </div>
+            </el-col>
+          </el-row>
+        </div>
+      </el-col>
+      <el-col :md="24" :lg="12">
         <div class="basic-info">
           <div class="head">用户信息</div>
           <el-row class="body">
@@ -64,51 +103,12 @@
           </el-row>
         </div>
       </el-col>
-      <el-col :md="24" :lg="12">
-        <div class="other-info">
-          <div class="head">砖石相关</div>
-          <el-row class="body">
-            <el-col @click="checkAgent()" class="col" :md="24" :lg="12">
-              <div class="icon">
-                <p class="title">下级代理数</p>
-                <p class="num" v-if="userInfo.child_agents">
-                  <CountTo :startVal='0' :endVal='userInfo.child_agents.length' :duration='2500'></CountTo>
-                </p>
-              </div>
-            </el-col>
-            <el-col class="col" :md="24" :lg="12">
-              <div class="icon">
-                <p class="title">剩余钻石数</p>
-                <p class="num">
-                  <CountTo :startVal='0' :endVal='userInfo.diamond_amount' :duration='2500'></CountTo>
-                </p>
-              </div>
-            </el-col>
-            <el-col class="col" :md="24" :lg="12">
-              <div class="icon">
-                <p class="title">总返利钻石数</p>
-                <p class="num">
-                  <CountTo :startVal='0' :endVal='userInfo.rebate_all' :duration='2500'></CountTo>
-                </p>
-              </div>
-            </el-col>
-            <el-col class="col" :md="24" :lg="12">
-              <div class="icon">
-                <p class="title">可领取砖石数</p>
-                <p class="num">
-                  <CountTo :startVal='0' :endVal='userInfo.rebate_amount' :duration='2500'></CountTo>
-                </p>
-              </div>
-            </el-col>
-          </el-row>
-        </div>
-      </el-col>
       <el-col class="hidden-sm-and-down">
         <div id="myChart" class="echart"></div>
       </el-col>
   </el-row>
 
-  <el-dialog title="下级代理" :visible.sync="juniorAgentVisibal">
+  <el-dialog title="下级代理" :visible.sync="juniorAgentVisibal" fullscreen>
     <el-table :data="juniorData">
       <el-table-column property="agent_phone" label="手机号"></el-table-column>
       <el-table-column property="agent_name" label="代理名称"></el-table-column>
@@ -171,7 +171,6 @@ export default {
      * }
      */
     checkAgent () {
-      this.juniorAgentVisibal = true
       let param = {
         parent_agent_id: this.userInfo.id,
         size: 15,
@@ -181,6 +180,7 @@ export default {
       JuniorAgentApi(param)
         .then(res => {
           if (res.data.code === 0) {
+            this.juniorAgentVisibal = true
             this.juniorData = res.data.data.data
           }
         })
@@ -267,7 +267,6 @@ export default {
     display: flex;
     flex-direction: column;
     background: #fff;
-
     .head{
       line-height: 42px;
       padding: 0 15px;
@@ -309,7 +308,6 @@ export default {
     display: flex;
     flex-direction: column;
     background: #fff;
-
     .head{
       line-height: 42px;
       padding: 0 15px;
@@ -318,7 +316,6 @@ export default {
       color: #333;
       font-size: 13px
     }
-
     .body{
       .col{
         .icon{
@@ -332,6 +329,11 @@ export default {
             font-weight: 400;
             color: #999;
             padding-bottom: 10px;
+            .check-icon{
+              margin: 0 2px;
+              color: #00a65a;
+              cursor: pointer;
+            }
           }
           .num{
             margin-left: 10px;

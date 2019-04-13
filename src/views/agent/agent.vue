@@ -1,9 +1,16 @@
 <template>
   <div id="agent">
     <div class="container">
-      <el-steps :active="step" simple>
+      <!-- pc -->
+      <el-steps :active="step" simple class="hidden-sm-and-down">
         <el-step title="充值卡" icon="el-icon-search"></el-step>
         <el-step title="支付方式" icon="el-icon-upload"></el-step>
+        <el-step title="完成" icon="el-icon-check"></el-step>
+      </el-steps>
+      <!-- mobile -->
+      <el-steps :active="step" simple class="hidden-md-and-up">
+        <el-step title="充值卡" icon="el-icon-search"></el-step>
+        <el-step title="渠道" icon="el-icon-upload"></el-step>
         <el-step title="完成" icon="el-icon-check"></el-step>
       </el-steps>
       <div class="inside-content">

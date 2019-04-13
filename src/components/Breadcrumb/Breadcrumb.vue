@@ -36,7 +36,6 @@ export default {
   position: relative;
   padding: 6px 20px;
   background-color: #f8f8f8;
-
   .name {
     display: inline-block;
     position: relative;
