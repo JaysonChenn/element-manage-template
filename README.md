@@ -2,15 +2,19 @@
 
 > 后台管理系统模板
 
-## 技术栈
-> vue
-> axios
-> vuex
-> element
-> scss
-> vue-router
+### 技术栈
 
-## 内容处理
+``` bash
+vue
+axios
+vuex
+element
+scss
+vue-router
+
+```
+
+### 内容处理
 > axios 二次封装
 
 ## Build Setup
