@@ -2,7 +2,7 @@
 
 > 后台管理系统模板
 
-# 技术栈
+## 技术栈
 > vue
 > axios
 > vuex
@@ -10,7 +10,7 @@
 > scss
 > vue-router
 
-# 内容处理
+## 内容处理
 > axios 二次封装
 
 ## Build Setup
