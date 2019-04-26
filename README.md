@@ -1,6 +1,17 @@
-# agent-admin
+# 简介
 
-> 代理后台管理系统
+> 后台管理系统模板
+
+# 技术栈
+> vue
+> axios
+> vuex
+> element
+> scss
+> vue-router
+
+# 内容处理
+> axios 二次封装
 
 ## Build Setup
 
