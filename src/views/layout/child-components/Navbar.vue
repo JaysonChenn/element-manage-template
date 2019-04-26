@@ -1,7 +1,7 @@
 <template>
   <el-aside id="navbar">
     <el-menu :default-active="$route.path" class="el-menu-vertical-demo" :collapse="isCollapse" :router="true" :unique-opened="true"
-      background-color="#001529" text-color="#E2E2E2">
+      background-color="#242a2e" text-color="#E2E2E2" active-text-color="#78faff">
       <el-menu-item :index="item.path" v-for="(item, index) in this.$router.options.routes.slice(2)" :key="index"
         v-show="item.children.length == 1">
         <i :class="`iconfont ${item.icon}`"></i>

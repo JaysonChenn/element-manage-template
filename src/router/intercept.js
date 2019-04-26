@@ -6,9 +6,8 @@ import store from '@/store/store'
  * @description 放行条件为是否登录
  */
 export default router.beforeEach((to, from, next) => {
-  store.commit('setCurrentRoute', to)
   let isLogin = store.state.userInfo == null ? null : store.state.userInfo
-  if (isLogin && isLogin !== null) {
+  if (isLogin && Object.keys(isLogin).length !== 0) {
     next()
   } else {
     if (to.path === '/login') {

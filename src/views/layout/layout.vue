@@ -2,7 +2,7 @@
   <el-container id="layout">
     <!-- aside -->
     <Navbar class="hidden-sm-and-down" />
-    <MobNavbar class="hidden-md-and-up" :style="isMobNavbarShow? 'height: 100vh; z-index: 1000' : 'height: 0; z-index：-1'" />
+    <MobNavbar class="hidden-md-and-up" :style="isMobNavbarShow? 'transform: none; z-index: 1000' : 'transform: translateX(-100%); z-index：-1'" />
     <!-- container -->
     <el-container class="container">
       <!-- header -->

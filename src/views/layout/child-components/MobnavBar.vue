@@ -1,9 +1,6 @@
 <template>
   <div id="mobnavbar">
-    <header>
-      <i class="iconfont iconquxiao" @click="setMobNavbarShow"></i>
-    </header>
-    <section>
+    <section :style="isMobNavbarShow ? 'transform: none; z-index: 1001' : 'translateX(-100%); z-index: 0'">
       <ul>
         <li v-for="(item, index) in navBarArr" :key="index">
           <div :class="[$route.path == item.path ? 'active-navbar' : '']" class="select-title" @click="item.children.length > 1 ? handleExpand('expand', item, index) : handleExpand('location', item, index)">
@@ -20,12 +17,14 @@
         </li>
       </ul>
     </section>
+    <div class="mask" @click="setMobNavbarShow()"></div>
   </div>
 </template>
 
 <script>
 import {
-  mapMutations
+  mapMutations,
+  mapState
 } from 'vuex'
 
 export default {
@@ -33,6 +32,9 @@ export default {
     return {
       navBarArr: []
     }
+  },
+  computed: {
+    ...mapState(['isMobNavbarShow'])
   },
   methods: {
     ...mapMutations(['setMobNavbarShow']),
@@ -92,57 +94,41 @@ export default {
   right: 0;
   bottom: 0;
   width: 100%;
-  height: 0;
-  z-index: -1;
-  background: rgba(0, 0, 0, .98);
-  transition: height ease-in .15s;
-
-  header {
-    padding: 20px;
-
-    .iconquxiao {
-      font-size: 20px;
-      color: #fff;
-    }
-  }
-
+  height: 100%;
   section {
-    padding: 10px 45px;
+    background: #242a2e;
+    width: 65%;
     flex: 1;
-    overflow: auto;
-
+    z-index: -1;
+    transform: translateX(-100%);
+    transition: transform ease-in .15s;
     ul {
+      overflow: auto;
       padding: 0;
       list-style: none;
-
       li {
         color: #fff;
         font-size: 14px;
-        padding: 12px 0;
-
+        padding: 15px 30px;
+        border-bottom: 1px solid #3a3e42;
         .el-icon-arrow-down {
           float: right;
         }
-
         p {
           margin: 0;
-          padding: 12px 20px 0 35px;
+          padding: 12px 0 0 35px;
         }
-
         .select-title {
           @include flex-box(row, flex-start, center, nowrap);
           cursor: pointer;
         }
-
         .navar-title{
           margin-left: 10px;
         }
-
         .arrow{
           flex: 1;
           text-align: right
         }
-
         .select-content {
           p {
             cursor: pointer;
@@ -150,9 +136,8 @@ export default {
         }
       }
     }
-
     .active-navbar {
-      color: #409EFF;
+      color: #78faff;
     }
   }
 }

@@ -3,7 +3,7 @@
     <!-- pc -->
     <canvas id="canvas" class="canvas" v-if="isPc"></canvas>
     <section class="form" v-if="isPc">
-      <p class="form-head">代理后台</p>
+      <p class="form-head">模板后台</p>
       <el-form
       :model="loginForm"
       :rules="rules"
@@ -30,13 +30,13 @@
         <el-button
         type="primary"
         size="small"
-        @click="submitLogin" :loading="btnLoading">登录</el-button>
+        @click="submitLogin">登录</el-button>
         <p class="tips">请输入用户名密码登陆</p>
       </el-form>
     </section>
     <!-- mobile -->
     <section class="form form-mobile" v-if="!isPc">
-      <p class="form-head">代理后台登录</p>
+      <p class="form-head">模板后台</p>
       <el-form
       :model="loginForm"
       :rules="rules"
@@ -62,8 +62,8 @@
         </el-form-item>
         <el-button
         type="primary"
-        size="small"
-        @click="submitLogin" :loading="btnLoading">登录</el-button>
+        size="medium"
+        @click="submitLogin">登录</el-button>
         <p class="tips">请输入用户名密码登陆</p>
       </el-form>
     </section>
@@ -77,9 +77,6 @@ import {
 import {
   LoginApi
 } from '@/api/login'
-import {
-  NotifyMesApi
-} from '@/api/notify'
 
 export default {
   data () {
@@ -98,7 +95,6 @@ export default {
       }
     }
     return {
-      btnLoading: false,
       isPc: true,
       loginForm: {
         agent_phone: '',
@@ -119,38 +115,22 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['setMesInfo', 'setUserInfo']),
+    ...mapMutations(['setUserInfo']),
     /**
      * @description 登录
      */
     submitLogin () {
       this.$refs['loginForm'].validate((valid) => {
         if (valid) {
-          this.btnLoading = true
           LoginApi(this.loginForm)
             .then(res => {
-              this.btnLoading = false
               if (res.data.code === 0) {
                 sessionStorage.setItem('userinfo', JSON.stringify(res.data.data))
                 this.setUserInfo(res.data.data)
+                this.$router.push('/index')
               }
-            })
-            .then(() => {
-              let param = {
-                order: 'desc'
-              }
-              NotifyMesApi(param)
-                .then(res => {
-                  let obj = {}
-                  obj.allArr = res.data.data.data
-                  obj.unreadArr = res.data.data.data.filter(item => { return item.notice_state === 0 })
-                  obj.havereadArr = res.data.data.data.filter(item => { return item.notice_state !== 0 })
-                  this.setMesInfo(obj)
-                  this.$router.push('/userinfo')
-                })
             })
             .catch(() => {
-              this.btnLoading = false
               this.$refs['loginForm'].resetFields()
             })
         }
@@ -283,7 +263,6 @@ export default {
   mounted () {
     if (/Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent)) {
       this.isPc = false
-      console.log(1)
     } else {
       this.isPc = true
       this.initCanvas()
@@ -299,7 +278,6 @@ export default {
 #login {
   @include flex-box(column, center, center, nowrap);
   background: #121223;
-
   .form {
     position: fixed;
     top: 50%;
@@ -308,7 +286,6 @@ export default {
     width: 305px;
     background: rgba(255, 255, 255, 1);
     border-radius: 2px;
-
     .form-head {
       border-bottom: 1px solid #e8eaec;
       padding: 14px 16px;
@@ -319,11 +296,9 @@ export default {
       font-weight: 700;
       overflow: hidden;
     }
-
     .el-form {
       @include flex-box(column, center, inherit, nowrap);
       padding: 28px 16px 12px 16px;
-
       .tips {
         padding-top: 15px;
         font-size: 10px;
@@ -332,7 +307,6 @@ export default {
       }
     }
   }
-
   .form-mobile{
     width: 100%;
     height: 100%;
